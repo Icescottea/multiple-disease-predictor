@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Disease Prediction Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    label {
+      display: inline-block;
+      width: 200px;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 10px;
+    }
+    .symptom {
+      margin-bottom: 8px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test Disease Prediction</h1>
+  <form id="symptomForm">
+    <div class="symptom"><label><input type="checkbox" name="fever">Fever</label></div>
+    <div class="symptom"><label><input type="checkbox" name="cough">Cough</label></div>
+    <div class="symptom"><label><input type="checkbox" name="chest_pain">Chest Pain</label></div>
+    <div class="symptom"><label><input type="checkbox" name="fatigue">Fatigue</label></div>
+    <div class="symptom"><label><input type="checkbox" name="weight_loss">Weight Loss</label></div>
+    <div class="symptom"><label><input type="checkbox" name="shortness_of_breath">Shortness of Breath</label></div>
+    <div class="symptom"><label><input type="checkbox" name="nausea">Nausea</label></div>
+    <div class="symptom"><label><input type="checkbox" name="vomiting">Vomiting</label></div>
+    <div class="symptom"><label><input type="checkbox" name="headache">Headache</label></div>
+    <div class="symptom"><label><input type="checkbox" name="dizziness">Dizziness</label></div>
+    <div class="symptom"><label><input type="checkbox" name="palpitations">Palpitations</label></div>
+    <div class="symptom"><label><input type="checkbox" name="abdominal_pain">Abdominal Pain</label></div>
+    <div class="symptom"><label><input type="checkbox" name="joint_pain">Joint Pain</label></div>
+    <div class="symptom"><label><input type="checkbox" name="muscle_pain">Muscle Pain</label></div>
+    <div class="symptom"><label><input type="checkbox" name="diarrhea">Diarrhea</label></div>
+    <div class="symptom"><label><input type="checkbox" name="constipation">Constipation</label></div>
+    <div class="symptom"><label><input type="checkbox" name="blood_in_stool">Blood in Stool</label></div>
+    <div class="symptom"><label><input type="checkbox" name="skin_rash">Skin Rash</label></div>
+    <div class="symptom"><label><input type="checkbox" name="night_sweats">Night Sweats</label></div>
+    <div class="symptom"><label><input type="checkbox" name="loss_of_appetite">Loss of Appetite</label></div>
+    <div class="symptom"><label><input type="checkbox" name="swelling">Swelling</label></div>
+    <div class="symptom"><label><input type="checkbox" name="yellow_skin">Yellow Skin</label></div>
+    <div class="symptom"><label><input type="checkbox" name="back_pain">Back Pain</label></div>
+    <div class="symptom"><label><input type="checkbox" name="vision_problems">Vision Problems</label></div>
+    <div class="symptom"><label><input type="checkbox" name="bleeding">Bleeding</label></div>
+    <button type="submit">Predict Disease</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('symptomForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const data = {};
+
+      checkboxes.forEach(box => {
+        data[box.name] = box.checked ? 1 : 0;
+      });
+
+      fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').innerText = "Predicted Disease: " + data.predicted_disease;
+      })
+      .catch(err => {
+        document.getElementById('result').innerText = "Error predicting disease.";
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>

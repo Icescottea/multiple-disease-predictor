@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environments
+venv/
+.env
+
+# VS Code or PyCharm
+.vscode/
+.idea/
+
+# System
+.DS_Store
+
+# Models
+*.pkl
