@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Tuberculosis",
+    "details": "A bacterial infection that mainly affects the lungs. Symptoms include coughing (sometimes with blood), weight loss, night sweats, and fever.",
+    "treatment": "Antibiotics for 6–9 months. Common drugs include isoniazid, rifampin, ethambutol, and pyrazinamide."
+  },
+  {
+    "name": "Ischemic Heart Disease",
+    "details": "Occurs when the heart's blood supply is blocked or interrupted by a build-up of fatty substances.",
+    "treatment": "Lifestyle changes, medications (e.g., statins, beta-blockers), or surgery (e.g., bypass or angioplasty)."
+  }
+]

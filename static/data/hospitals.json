@@ -1,0 +1,20 @@
+[
+  {
+    "name": "General Hospital Colombo",
+    "location": "Colombo",
+    "specialties": ["cancer", "tuberculosis", "ischemic heart disease"],
+    "contact": "011-1234567"
+  },
+  {
+    "name": "Kandy Teaching Hospital",
+    "location": "Kandy",
+    "specialties": ["chronic heart disease", "cancer", "cirrhosis of the liver"],
+    "contact": "081-7654321"
+  },
+  {
+    "name": "Jaffna General Hospital",
+    "location": "Jaffna",
+    "specialties": ["tuberculosis", "cirrhosis of the liver"],
+    "contact": "021-9988776"
+  }
+]

@@ -1,0 +1,437 @@
+/* Body & Reset */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: #f9f9f9;
+  overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 30px;
+  height: 60px;
+  border-bottom: 1px solid #ddd;
+  color: #000000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #242c44;
+  font-size: 1.8em;
+  font-weight: bold;
+  font-family: 'Costa Std ExtraBold';
+  margin-left: 70px;
+}
+
+.logo-img {
+  height: 60px;
+  margin-right: 10px;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #242c44;
+  font-weight: bold;
+  font-family: 'Ariata Display Medium';
+  font-size: 1.1rem;
+}
+
+.nav-links a:hover {
+  color: cadetblue;
+}
+
+/* User Dropdown */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon {
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: #333;
+  padding: 10px 0px;
+  text-decoration: none;
+  display: block;
+  margin-left: 0px;
+  font-size: 1rem;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.show {
+  display: block;
+}
+
+/* Hero */
+.hero {
+  padding: 85px 40px;
+  background-color: #ffffff;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 40px;
+}
+
+.hero-text {
+  flex: 1;
+  text-align: left;
+  padding-right: 40px;
+  margin-left: 43px;
+}
+
+.hero-text h1 {
+  font-size: 2.2em;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.hero-text p {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  padding: 12px 25px;
+  font-size: 1em;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #0056b3;
+}
+
+.hero-images {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: auto;
+}
+
+.diamond {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  transform: rotate(45deg);
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.diamond img {
+  position: absolute;
+  width: 180%;
+  height: 180%;
+  top: -40%;
+  left: -40%;
+  object-fit: cover;
+  transform: rotate(-45deg);
+}
+
+/* Center image */
+.diamond-center {
+  top: 107px;
+  left: -167px;
+  z-index: 2;
+}
+
+/* Top-left image */
+.diamond-top {
+  top: -58px;
+  left: 0;
+  z-index: 1;
+}
+
+/* Bottom-right image */
+.diamond-bottom {
+  top: 107px;
+  left: 169px;
+  z-index: 1;
+}
+
+/* Footer */
+.footer {
+  background-color: #74efff; /* you can use any light teal or custom color */
+  color: #111;
+  font-family: Arial, sans-serif;
+}
+
+/* Top main layout */
+.footer-main {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  gap: 100px;
+}
+
+/* Left logo */
+.footer-logo-left img {
+  width: 200px;
+  height: auto;
+  margin: 20px 0 20px 40px;
+}
+
+/* Center content */
+.footer-center-content {
+  flex: 1;
+  text-align: left;
+}
+
+.footer-brand h2 {
+  font-size: 2.6em;
+  margin-bottom: 20px;
+  margin-left: 258px;
+  font-family: 'Costa Std ExtraBold';
+}
+
+/* Columns */
+.footer-columns {
+  display: flex;
+  justify-content: center;
+  gap: 140px;
+  flex-wrap: wrap;
+  margin-left: 155px;
+}
+
+.footer-column h3 {
+  font-size: 1em;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-family: 'Ariata Display Medium';
+}
+
+.footer-column p {
+  margin: 6px 0;
+  font-size: 0.95em;
+  font-family: 'Ariata Display Regular';
+}
+
+/* Divider line */
+.footer-divider {
+  border: none;
+  border-top: 1px solid #666;
+  width: 90%;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 0.85em;
+  color: #222;
+}
+
+.footer-bottom a {
+  color: #222;
+  text-decoration: none;
+  margin-left: 440px;
+}
+
+/* Login Page Styles */
+.login-body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #ffffff, #ffffff);
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: left;
+  overflow: hidden;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* Match visual card with login card style */
+.login-card.visual-card {
+  width: 400px;
+  height: 100%;
+  border-radius: 20px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.login-card.visual-card img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.login-card.single {
+  width: 400px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 40px;
+}
+
+/* Login Card Container */
+.login-card.single {
+  width: 400px;
+  height: 500px; 
+  border-radius: 20px;
+  background-color: #fffdff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px; 
+  overflow: hidden; 
+}
+
+.login-right {
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+
+/* Login Form Section */
+.login-right h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #597FCA;
+  text-align: center;
+  font-family: 'Costa Std ExtraBold';
+}
+
+.login-right label {
+  display: block;
+  margin: 15px 0 10px;
+  font-weight: bold;
+  color: #597FCA;
+  font-family: 'Ariata Display Medium';
+}
+
+.login-right input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.login-right input:focus {
+  border-color: #3399ff;
+  outline: none;
+}
+
+.form-actions {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.forgot-link {
+  font-size: 0.9em;
+  color: #597FCA;
+  text-decoration: none;
+  font-family: 'Ariata Display Medium';
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  background-color: #597FCA;
+  color: white;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'FSP DEMO - The Seasons';
+}
+
+button[type="submit"]:hover {
+  background-color: #005fcc;
+}
+
+/* Footer */
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-family: 'Ariata Display Medium';
+  font-size: 0.8em;}
+
+.login-footer a {
+  color: #003366;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.scroll-inner {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; 
+}
+
+.scroll-inner::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}

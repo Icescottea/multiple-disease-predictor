@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    h2 { margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <p><a href="/admin/stats">📊 View Analytics</a></p>
+  <p><a href="/admin/export-csv">⬇️ Export All Medical Records as CSV</a></p>
+
+  <h2>Registered Users</h2>
+  <table>
+    <tr><th>ID</th><th>Username</th><th>Email</th><th>Location</th></tr>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.location or 'N/A' }}</td>
+      <td>
+        <a href="/admin/delete-user/{{ user.id }}" onclick="return confirm('Delete user {{ user.username }}?')">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>All Medical Predictions</h2>
+  <table>
+    <tr><th>ID</th><th>User ID</th><th>Disease</th><th>Date</th></tr>
+    {% for rec in records %}
+    <tr>
+      <td>{{ rec.id }}</td>
+      <td>{{ rec.user_id }}</td>
+      <td>
+        {{ rec.disease }}<br>
+        <small>
+          {% set sym_dict = rec.symptoms_json | tojson | loads %}
+          Symptoms: {{ sym_dict | dictsort | selectattr('1', 'equalto', 1) | map(attribute=0) | join(', ') }}
+        </small>
+      </td>
+      <td>{{ rec.date.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>
+        <a href="/admin/delete-record/{{ rec.id }}" onclick="return confirm('Delete this record?')">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

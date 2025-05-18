@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Symptom Checker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .nav-buttons { margin-top: 30px; text-align: center; }
+    .nav-buttons button { margin: 0 10px; padding: 10px 20px; }
+    #suggestions div {
+      padding: 5px 10px;
+      background: #f0f0f0;
+      margin-top: 2px;
+    }
+    #selected-symptoms span {
+      display: inline-block;
+      background: #d4edda;
+      margin: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Symptom Checker</h2>
+
+  <!-- Step 1: Basic Info -->
+  <div id="step-1" class="section active">
+    <h3>Basic Info</h3>
+    <form id="basic-info-form">
+      <label>Age: <input type="number" name="age" required></label><br><br>
+      <label>Gender:
+        <select name="gender" required>
+          <option value="">--Select--</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </label><br><br>
+    </form>
+  </div>
+
+  <!-- Step 2: Symptom Input -->
+  <div id="step-2" class="section">
+    <h3>Select Symptoms</h3>
+    <input type="text" id="symptom-search" placeholder="Type symptoms..." autocomplete="off"/>
+    <h4>Or select a body part:</h4>
+    <div id="body-map">
+      <img src="{{ url_for('static', filename='images/male-body.png') }}" alt="Body Map" id="body-image" usemap="#body-parts">
+      <map name="body-parts">
+        <area shape="rect" coords="80,20,120,60" alt="Head" onclick="selectBodyPart('head')">
+        <area shape="rect" coords="70,60,130,120" alt="Chest" onclick="selectBodyPart('chest')">
+        <area shape="rect" coords="70,120,130,180" alt="Abdomen" onclick="selectBodyPart('abdomen')">
+        <area shape="rect" coords="50,180,90,250" alt="Left Leg" onclick="selectBodyPart('leg')">
+        <area shape="rect" coords="110,180,150,250" alt="Right Leg" onclick="selectBodyPart('leg')">
+      </map>
+    </div>
+    <div id="suggestions"></div>
+    <div id="selected-symptoms"></div>
+    <button onclick="submitSymptoms()">Check for Possible Diseases</button>
+  </div>
+
+  <!-- Step 3: Prediction Results -->
+  <div id="step-3" class="section">
+    <h3>Possible Disease:</h3>
+    <p id="disease-result" style="font-size: 1.5em; font-weight: bold;"></p>
+    <button onclick="nextStep()">View Details</button>
+  </div>
+
+  <!-- Step 4: Disease Details -->
+  <div id="step-4" class="section">
+    <h3>Disease Details</h3>
+    <div id="disease-details">Coming soon...</div>
+  </div>
+
+  <!-- Step 5: Treatment Info -->
+  <div id="step-5" class="section">
+    <h3>Treatment</h3>
+    <div id="treatment-info">Coming soon...</div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="nav-buttons">
+    <button onclick="prevStep()">Previous</button>
+    <button onclick="nextStep()">Next</button>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+    let symptomsList = [];
+    let selectedSymptoms = [];
+
+    function showStep(step) {
+      for (let i = 1; i <= totalSteps; i++) {
+        document.getElementById('step-' + i).classList.remove('active');
+      }
+      document.getElementById('step-' + step).classList.add('active');
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    // Load symptoms.json
+    fetch('/static/data/symptoms.json')
+      .then(res => res.json())
+      .then(data => {
+        symptomsList = data.map(s => s.toLowerCase());
+      });
+
+    document.getElementById('symptom-search').addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const matches = symptomsList.filter(s => s.includes(query) && !selectedSymptoms.includes(s));
+      const suggestions = document.getElementById('suggestions');
+      suggestions.innerHTML = '';
+
+      matches.slice(0, 8).forEach(symptom => {
+        const div = document.createElement('div');
+        div.textContent = symptom;
+        div.className = 'suggestion';
+        div.onclick = () => selectSymptom(symptom);
+        suggestions.appendChild(div);
+      });
+    });
+
+    function selectSymptom(symptom) {
+      selectedSymptoms.push(symptom);
+      updateSelectedList();
+      document.getElementById('symptom-search').value = '';
+      document.getElementById('suggestions').innerHTML = '';
+    }
+
+    function updateSelectedList() {
+      const container = document.getElementById('selected-symptoms');
+      container.innerHTML = '';
+      selectedSymptoms.forEach((s, i) => {
+        const chip = document.createElement('span');
+        chip.textContent = s + ' ×';
+        chip.onclick = () => {
+          selectedSymptoms.splice(i, 1);
+          updateSelectedList();
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    function submitSymptoms() {
+      if (selectedSymptoms.length === 0) {
+        alert("Please select at least one symptom.");
+        return;
+      }
+
+      const payload = {};
+      selectedSymptoms.forEach(sym => {
+        payload[sym.toLowerCase()] = 1;
+      });
+
+      fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.predicted_disease) {
+          document.getElementById('disease-result').textContent = data.predicted_disease;
+          nextStep();
+        } else {
+          alert("No prediction received.");
+        }
+      })
+      .catch(err => {
+        console.error("Prediction error:", err);
+        alert("Prediction failed.");
+      });
+    }
+
+    function loadDiseaseInfo(name) {
+      fetch('/static/data/diseases.json')
+        .then(res => res.json())
+        .then(data => {
+          const match = data.find(d => d.name.toLowerCase() === name.toLowerCase());
+          if (match) {
+            document.getElementById('disease-details').textContent = match.details;
+            document.getElementById('treatment-info').textContent = match.treatment;
+          } else {
+            document.getElementById('disease-details').textContent = "No details found.";
+            document.getElementById('treatment-info').textContent = "No treatment info available.";
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load disease info:", err);
+        });
+    }
+
+    // Call this when you move from Step 3 to Step 4
+    function nextStep() {
+      if (currentStep === 3) {
+        const disease = document.getElementById('disease-result').textContent;
+        loadDiseaseInfo(disease);
+      }
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    const symptomByBodyPart = {
+      head: ["headache", "dizziness", "vision problems"],
+      chest: ["chest pain", "shortness of breath", "palpitations"],
+      abdomen: ["abdominal pain", "nausea", "vomiting", "diarrhea"],
+      leg: ["swelling", "muscle pain", "joint pain"],
+      // Expand as needed
+    };
+
+    function selectBodyPart(part) {
+      const options = symptomByBodyPart[part] || [];
+      options.forEach(sym => {
+        if (!selectedSymptoms.includes(sym)) {
+          selectedSymptoms.push(sym);
+        }
+      });
+      updateSelectedList();
+    }
+
+  </script>
+</body>
+</html>
