@@ -13,5 +13,3 @@ venv/
 # System
 .DS_Store
 
-# Models
-*.pkl
