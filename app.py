@@ -17,19 +17,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Load model and encoder
-model_path = os.path.join("models", "disease_predictor.pkl")
+# Load model
+model_path = os.path.join("models", "rf_disease_model.pkl")
 print("Loading model from:", model_path)
 model = joblib.load(model_path)
 
-encoder = joblib.load(os.path.join("models", "label_encoder.pkl"))
+# Load symptoms dynamically from JSON
+with open("static/data/symptoms.json") as f:
+    SYMPTOM_ORDER = sorted([s.lower() for s in json.load(f)])
 
-# Define the symptom order
-SYMPTOM_ORDER = ['fever', 'cough', 'chest_pain', 'fatigue', 'weight_loss', 'shortness_of_breath',
-                 'nausea', 'vomiting', 'headache', 'dizziness', 'palpitations', 'abdominal_pain',
-                 'joint_pain', 'muscle_pain', 'diarrhea', 'constipation', 'blood_in_stool',
-                 'skin_rash', 'night_sweats', 'loss_of_appetite', 'swelling', 'yellow_skin',
-                 'back_pain', 'vision_problems', 'bleeding']
+PRIORITY_DISEASES = ['ischemic heart disease', 'chronic heart disease', 'tuberculosis', 'cirrhosis of the liver', 'cancer']
 
 SPECIALTY_KEYWORDS = {
     'ischemic heart disease': 'cardiology',
@@ -104,8 +101,7 @@ def register():
         age = int(request.form['age'])
         gender = request.form['gender']
 
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
+        if User.query.filter_by(username=username).first():
             return "Username already taken", 409
 
         new_user = User(
@@ -131,8 +127,7 @@ def login():
             session['user_id'] = user.id
             session['username'] = user.username
             return redirect(url_for('home_page'))
-        else:
-            return "Invalid credentials", 401
+        return "Invalid credentials", 401
     return render_template('login.html')
 
 @app.route('/logout')
@@ -143,46 +138,75 @@ def logout():
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    inputs = [int(data.get(symptom, 0)) for symptom in SYMPTOM_ORDER]
-    prediction = model.predict([inputs])
-    disease = encoder.inverse_transform(prediction)[0]
-    return jsonify({'predicted_disease': disease})
+    if not data:
+        return jsonify({'error': 'No input received'}), 400
 
-@app.route('/test')
-def test_page():
-    return render_template('test.html')
+    input_data = [1 if symptom in data and data[symptom] == 1 else 0 for symptom in SYMPTOM_ORDER]
+
+    if 'user_id' in session:
+        history = MedicalHistory.query.filter_by(user_id=session['user_id']).order_by(MedicalHistory.date.desc()).limit(3).all()
+        past_diseases = [h.disease.lower() for h in history]
+        history_vector = [1 if d in past_diseases else 0 for d in PRIORITY_DISEASES]
+    else:
+        history_vector = [0] * len(PRIORITY_DISEASES)
+
+    full_input = input_data + history_vector
+    try:
+        prediction = model.predict([full_input])[0]
+        return jsonify({'predicted_disease': prediction})
+    except Exception as e:
+        print("Prediction error:", e)
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/symptom-checker', methods=['GET', 'POST'])
 def symptom_checker():
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    prediction = None
+    user_gender = None
+    user_age = None
+    user_logged_in = 'username' in session
 
-    prediction = None  # default when not POST
+    if user_logged_in:
+        user = User.query.get(session['user_id'])
+        user_gender = user.gender
+        user_age = user.age
 
     if request.method == 'POST':
-        input_data = [1 if s in request.form else 0 for s in SYMPTOM_ORDER]
+        symptom_data = request.get_json()
+        age = symptom_data.get('age', user_age)
+        gender = symptom_data.get('gender', user_gender)
 
-        # Fetch last 3 records for this user
-        history = MedicalHistory.query.filter_by(user_id=session['user_id']).order_by(MedicalHistory.date.desc()).limit(3).all()
-        past_diseases = [h.disease.lower() for h in history]
+        input_data = [int(symptom_data.get(sym, 0)) for sym in SYMPTOM_ORDER]
 
-        PRIORITY_DISEASES = ['ischemic heart disease', 'chronic heart disease', 'tuberculosis', 'cirrhosis of the liver', 'cancer']
-        history_vector = [1 if d in past_diseases else 0 for d in PRIORITY_DISEASES]
+        if user_logged_in:
+            history = MedicalHistory.query.filter_by(user_id=session['user_id']).order_by(MedicalHistory.date.desc()).limit(3).all()
+            past_diseases = [h.disease.lower() for h in history]
+            history_vector = [1 if d in past_diseases else 0 for d in PRIORITY_DISEASES]
+        else:
+            history_vector = [0] * len(PRIORITY_DISEASES)
 
         full_input = input_data + history_vector
         pred = model.predict([full_input])[0]
-        prediction = encoder.inverse_transform([pred])[0]
+        prediction = pred
 
-        # Save to medical history
-        history_record = MedicalHistory(
-            user_id=session['user_id'],
-            disease=prediction,
-            symptoms_json=json.dumps(dict(zip(SYMPTOM_ORDER, input_data)))
-        )
-        db.session.add(history_record)
-        db.session.commit()
+        if user_logged_in:
+            record = MedicalHistory(
+                user_id=session['user_id'],
+                disease=prediction,
+                symptoms_json=json.dumps(dict(zip(SYMPTOM_ORDER, input_data)))
+            )
+            db.session.add(record)
+            db.session.commit()
 
-    return render_template('symptom_checker.html', symptoms=SYMPTOM_ORDER, prediction=prediction)
+        return jsonify({'predicted_disease': prediction})
+
+    return render_template(
+        'symptom_checker.html',
+        symptoms=SYMPTOM_ORDER,
+        prediction=prediction,
+        user_logged_in=user_logged_in,
+        user_gender=user_gender,
+        user_age=user_age
+    )
 
 @app.route('/recommend-hospital', methods=['POST'])
 def recommend_hospital():
@@ -192,7 +216,6 @@ def recommend_hospital():
     disease = request.form.get('disease')
     user = User.query.get(session['user_id'])
     location = user.location
-
     hospitals = get_hospitals_from_google(location, disease)
     return render_template('hospital_results.html', hospitals=hospitals, disease=disease, location=location)
 
@@ -204,13 +227,10 @@ def profile():
     user_id = session['user_id']
     user = User.query.get(user_id)
     history = MedicalHistory.query.filter_by(user_id=user_id).order_by(MedicalHistory.date.desc()).all()
-
-    # Parse JSON symptom data
     for rec in history:
         rec.symptoms = json.loads(rec.symptoms_json)
-
     return render_template('profile.html', history=history, username=session['username'], location=user.location)
-
+    
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
