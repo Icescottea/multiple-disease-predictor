@@ -1,0 +1,241 @@
+[
+  {
+    "name": "asthma",
+    "treatment_goals": "To reduce airway inflammation and prevent asthma attacks.",
+    "treatment_options": [
+      "Inhaled corticosteroids (e.g., fluticasone)",
+      "Bronchodilators (e.g., albuterol)",
+      "Leukotriene modifiers",
+      "Immunotherapy in allergic asthma cases"
+    ],
+    "self_care": [
+      "Avoid triggers like dust, pollen, smoke",
+      "Use a peak flow meter to monitor breathing",
+      "Maintain physical activity under guidance"
+    ],
+    "long_term_management": "Ongoing medication adjustment and lung function monitoring with regular doctor visits.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "diabetes",
+    "treatment_goals": "To maintain healthy blood sugar levels and prevent complications.",
+    "treatment_options": [
+      "Insulin therapy (Type 1 or severe Type 2)",
+      "Oral medications (e.g., metformin)",
+      "Diet and physical activity management"
+    ],
+    "self_care": [
+      "Regular blood glucose monitoring",
+      "Balanced low-sugar diet",
+      "Consistent exercise routine"
+    ],
+    "long_term_management": "Regular A1C tests and screening for complications like retinopathy or neuropathy.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "appendicitis",
+    "treatment_goals": "To remove the inflamed appendix and prevent rupture or infection.",
+    "treatment_options": [
+      "Surgical removal (appendectomy)",
+      "Antibiotics (in select non-surgical cases)"
+    ],
+    "self_care": [
+      "Post-surgical rest and hygiene",
+      "Pain management as prescribed"
+    ],
+    "long_term_management": "Typically not required after full recovery.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "bronchitis",
+    "treatment_goals": "To relieve symptoms and resolve infection or inflammation.",
+    "treatment_options": [
+      "Cough suppressants",
+      "Bronchodilators",
+      "Antibiotics (if bacterial)",
+      "Humidified air or steam therapy"
+    ],
+    "self_care": [
+      "Stay hydrated",
+      "Rest and avoid smoke or irritants"
+    ],
+    "long_term_management": "Chronic cases (e.g., in COPD) require pulmonary rehab.",
+    "emergency_care_needed": false
+  },
+  {
+    "name": "cancer",
+    "treatment_goals": "To remove, shrink, or stop the growth of cancer cells.",
+    "treatment_options": [
+      "Surgery",
+      "Radiation therapy",
+      "Chemotherapy",
+      "Immunotherapy or targeted drug therapy"
+    ],
+    "self_care": [
+      "Nutrition and rest",
+      "Mental health support",
+      "Symptom monitoring"
+    ],
+    "long_term_management": "Ongoing follow-up for recurrence and side-effect management.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "chronic heart disease",
+    "treatment_goals": "To improve heart function and prevent complications like heart failure.",
+    "treatment_options": [
+      "ACE inhibitors and beta-blockers",
+      "Diuretics to reduce fluid buildup",
+      "Lifestyle changes and cardiac rehab"
+    ],
+    "self_care": [
+      "Low-sodium diet",
+      "Monitor blood pressure and weight",
+      "Avoid smoking and alcohol"
+    ],
+    "long_term_management": "Regular cardiology visits and medication adjustments.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "cirrhosis of the liver",
+    "treatment_goals": "To slow liver damage and manage complications.",
+    "treatment_options": [
+      "Avoid alcohol completely",
+      "Treat underlying causes (e.g., hepatitis)",
+      "Diuretics for fluid buildup",
+      "Liver transplant in severe cases"
+    ],
+    "self_care": [
+      "Low-salt diet",
+      "Avoid NSAIDs and alcohol",
+      "Get vaccinated against hepatitis"
+    ],
+    "long_term_management": "Regular liver function tests and screening for liver cancer.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "gallstones",
+    "treatment_goals": "To relieve pain and prevent recurrence or complications.",
+    "treatment_options": [
+      "Cholecystectomy (surgical removal)",
+      "Medications to dissolve stones (rare)",
+      "Pain relievers"
+    ],
+    "self_care": [
+      "Low-fat diet",
+      "Maintain healthy weight",
+      "Avoid rapid weight loss"
+    ],
+    "long_term_management": "Minimal after gallbladder removal.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "hepatitis",
+    "treatment_goals": "To reduce liver inflammation and prevent progression.",
+    "treatment_options": [
+      "Antiviral medications (e.g., for hepatitis B/C)",
+      "Liver-protective drugs",
+      "Avoid alcohol and hepatotoxic substances"
+    ],
+    "self_care": [
+      "Balanced diet and rest",
+      "Avoid alcohol",
+      "Practice safe hygiene"
+    ],
+    "long_term_management": "Regular liver monitoring and viral load testing.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "hypertension",
+    "treatment_goals": "To reduce and maintain safe blood pressure levels.",
+    "treatment_options": [
+      "ACE inhibitors, beta-blockers, diuretics",
+      "Lifestyle changes (e.g., salt reduction)",
+      "Stress management techniques"
+    ],
+    "self_care": [
+      "Monitor blood pressure regularly",
+      "Limit salt and caffeine intake",
+      "Exercise regularly"
+    ],
+    "long_term_management": "Lifelong monitoring and medication adherence.",
+    "emergency_care_needed": false
+  },
+  {
+    "name": "ischemic heart disease",
+    "treatment_goals": "To restore blood flow and prevent heart attacks.",
+    "treatment_options": [
+      "Nitrates, beta-blockers, statins",
+      "Angioplasty and stenting",
+      "Coronary artery bypass surgery"
+    ],
+    "self_care": [
+      "Healthy diet and exercise",
+      "Quit smoking",
+      "Monitor cholesterol levels"
+    ],
+    "long_term_management": "Cardiology care, stress tests, and medication adherence.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "migraine",
+    "treatment_goals": "To reduce frequency and severity of attacks.",
+    "treatment_options": [
+      "Triptans or NSAIDs for acute relief",
+      "Preventive medications (e.g., beta-blockers)",
+      "Botox or CGRP inhibitors for chronic cases"
+    ],
+    "self_care": [
+      "Identify and avoid triggers",
+      "Sleep hygiene and stress management"
+    ],
+    "long_term_management": "Regular neurologist consultation and symptom tracking.",
+    "emergency_care_needed": false
+  },
+  {
+    "name": "pneumonia",
+    "treatment_goals": "To eliminate the infection and restore normal lung function.",
+    "treatment_options": [
+      "Antibiotics (for bacterial pneumonia)",
+      "Antivirals (for viral causes)",
+      "Oxygen therapy and fluids"
+    ],
+    "self_care": [
+      "Rest and hydration",
+      "Use prescribed inhalers or meds",
+      "Avoid smoking"
+    ],
+    "long_term_management": "Vaccinations and respiratory checkups in high-risk individuals.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "tuberculosis",
+    "treatment_goals": "To cure infection and prevent transmission.",
+    "treatment_options": [
+      "Long-term antibiotic regimen (e.g., isoniazid, rifampin)",
+      "Directly observed therapy (DOT)"
+    ],
+    "self_care": [
+      "Complete full course of medication",
+      "Proper nutrition and hygiene",
+      "Avoid exposing others during active phase"
+    ],
+    "long_term_management": "Regular follow-up tests and public health monitoring.",
+    "emergency_care_needed": true
+  },
+  {
+    "name": "ulcer",
+    "treatment_goals": "To heal the ulcer and prevent recurrence.",
+    "treatment_options": [
+      "Proton pump inhibitors (e.g., omeprazole)",
+      "Antibiotics for H. pylori",
+      "Avoid NSAIDs and alcohol"
+    ],
+    "self_care": [
+      "Eat smaller meals",
+      "Avoid spicy and acidic foods",
+      "Manage stress"
+    ],
+    "long_term_management": "Gastroenterologist check-ups and endoscopy if needed.",
+    "emergency_care_needed": true
+  }
+]

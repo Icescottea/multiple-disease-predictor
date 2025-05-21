@@ -1,12 +1,122 @@
 [
   {
-    "name": "Tuberculosis",
-    "details": "A bacterial infection that mainly affects the lungs. Symptoms include coughing (sometimes with blood), weight loss, night sweats, and fever.",
-    "treatment": "Antibiotics for 6–9 months. Common drugs include isoniazid, rifampin, ethambutol, and pyrazinamide."
+    "name": "asthma",
+    "overview": "Asthma is a long-term disease of the lungs that causes your airways to become inflamed and narrowed, leading to difficulty breathing. It can be triggered by allergens, exercise, cold air, or respiratory infections.",
+    "symptoms": ["shortness of breath", "wheezing", "chest tightness"],
+    "how_common": "Affects approximately 1 in 13 people globally.",
+    "risk_factors": ["family history", "allergies", "pollution exposure"],
+    "diagnosed_by": "Doctors can usually diagnose asthma through a combination of medical history review, physical examination, and pulmonary function tests such as spirometry."
   },
   {
-    "name": "Ischemic Heart Disease",
-    "details": "Occurs when the heart's blood supply is blocked or interrupted by a build-up of fatty substances.",
-    "treatment": "Lifestyle changes, medications (e.g., statins, beta-blockers), or surgery (e.g., bypass or angioplasty)."
+    "name": "diabetes",
+    "overview": "Diabetes is a chronic metabolic disorder where the body either does not produce enough insulin or cannot effectively use the insulin it produces, leading to elevated levels of blood glucose.",
+    "symptoms": ["increased thirst", "frequent urination", "fatigue"],
+    "how_common": "Affects over 400 million people worldwide.",
+    "risk_factors": ["obesity", "inactivity", "family history"],
+    "diagnosed_by": "Your doctor can diagnose diabetes by reviewing your symptoms and performing blood tests such as fasting blood glucose, A1C test, or oral glucose tolerance test."
+  },
+  {
+    "name": "appendicitis",
+    "overview": "Appendicitis is the acute inflammation of the appendix, a finger-like pouch attached to the large intestine, often requiring surgical removal to prevent rupture and infection.",
+    "symptoms": ["abdominal pain", "nausea", "vomiting", "fever"],
+    "how_common": "Affects about 1 in 20 people over their lifetime.",
+    "risk_factors": ["age (10–30 years)", "family history", "infection"],
+    "diagnosed_by": "Doctors typically diagnose appendicitis by performing a physical examination and ordering imaging tests like an abdominal ultrasound or CT scan to detect inflammation."
+  },
+  {
+    "name": "bronchitis",
+    "overview": "Bronchitis involves inflammation of the bronchial tubes, which carry air to and from your lungs. It is usually caused by viruses or irritants like tobacco smoke and pollution.",
+    "symptoms": ["cough with mucus", "chest discomfort", "fatigue", "shortness of breath"],
+    "how_common": "Very common, especially acute bronchitis during cold seasons.",
+    "risk_factors": ["smoking", "air pollution", "weakened immune system"],
+    "diagnosed_by": "Bronchitis is usually diagnosed by listening to your lungs with a stethoscope, and if needed, conducting a chest X-ray or sputum test to rule out pneumonia."
+  },
+  {
+    "name": "cancer",
+    "overview": "Cancer encompasses a broad group of diseases characterized by uncontrolled cell growth that can invade nearby tissues and spread to other parts of the body.",
+    "symptoms": ["lumps", "unexplained weight loss", "fatigue", "pain", "changes in skin"],
+    "how_common": "One of the leading causes of death worldwide.",
+    "risk_factors": ["genetics", "smoking", "radiation", "chemical exposure", "infection"],
+    "diagnosed_by": "Cancer diagnosis depends on the type and may include imaging tests, blood tests, and biopsies to examine tissue samples for abnormal cell growth."
+  },
+  {
+    "name": "chronic heart disease",
+    "overview": "Chronic heart disease includes a range of long-standing conditions that impair the heart’s structure and function, often resulting in reduced blood flow and heart failure over time.",
+    "symptoms": ["chest pain", "shortness of breath", "fatigue", "swelling in legs"],
+    "how_common": "Affects millions globally; a leading cause of death.",
+    "risk_factors": ["high blood pressure", "diabetes", "smoking", "high cholesterol"],
+    "diagnosed_by": "Doctors diagnose chronic heart disease using electrocardiograms (ECG), echocardiograms, stress tests, and sometimes coronary angiography to assess blood flow and heart function."
+  },
+  {
+    "name": "cirrhosis of the liver",
+    "overview": "Cirrhosis is the advanced scarring of the liver tissue caused by prolonged liver damage. It significantly impacts liver function and can lead to life-threatening complications.",
+    "symptoms": ["fatigue", "jaundice", "abdominal swelling", "easy bruising"],
+    "how_common": "Common among people with chronic liver disease or alcohol abuse.",
+    "risk_factors": ["alcoholism", "hepatitis B/C", "fatty liver disease"],
+    "diagnosed_by": "To diagnose cirrhosis, doctors typically conduct blood tests to evaluate liver function, followed by imaging studies or a liver biopsy to confirm scarring."
+  },
+  {
+    "name": "gallstones",
+    "overview": "Gallstones are solid particles that form in the gallbladder from bile cholesterol and bilirubin, and may cause pain, infection, or blockages in the digestive tract.",
+    "symptoms": ["sudden abdominal pain", "nausea", "vomiting", "indigestion"],
+    "how_common": "Affects 10–15% of adults in developed countries.",
+    "risk_factors": ["obesity", "age", "pregnancy", "rapid weight loss"],
+    "diagnosed_by": "Doctors diagnose gallstones by performing an abdominal ultrasound or CT scan. Blood tests may be done to check for infection or bile duct blockage."
+  },
+  {
+    "name": "hepatitis",
+    "overview": "Hepatitis refers to liver inflammation caused by viruses, alcohol use, or autoimmune conditions. It can lead to liver damage, cirrhosis, or liver cancer.",
+    "symptoms": ["jaundice", "fatigue", "abdominal pain", "dark urine", "nausea"],
+    "how_common": "Hundreds of millions affected globally (especially hepatitis B and C).",
+    "risk_factors": ["unprotected sex", "shared needles", "contaminated food/water"],
+    "diagnosed_by": "Hepatitis can be diagnosed through liver function blood tests and a viral hepatitis panel to detect specific virus types like hepatitis A, B, or C."
+  },
+  {
+    "name": "hypertension",
+    "overview": "Hypertension, or high blood pressure, is a condition in which the force of the blood against your artery walls is consistently too high, often without noticeable symptoms.",
+    "symptoms": ["often none", "headaches", "shortness of breath", "nosebleeds (in severe cases)"],
+    "how_common": "Affects more than 1 billion people worldwide.",
+    "risk_factors": ["age", "obesity", "salt intake", "genetics"],
+    "diagnosed_by": "Your doctor can diagnose hypertension simply by taking your blood pressure using a cuff and stethoscope over several visits to confirm elevated readings."
+  },
+  {
+    "name": "ischemic heart disease",
+    "overview": "Ischemic heart disease, also called coronary artery disease, occurs when the heart's blood supply is blocked or interrupted by a build-up of fatty substances in the coronary arteries.",
+    "symptoms": ["chest pain (angina)", "shortness of breath", "fatigue"],
+    "how_common": "The leading cause of death globally.",
+    "risk_factors": ["smoking", "diabetes", "high blood pressure", "high cholesterol"],
+    "diagnosed_by": "Doctors use tests like ECG, stress tests, and coronary angiography to diagnose ischemic heart disease and evaluate the severity of blood flow reduction."
+  },
+  {
+    "name": "migraine",
+    "overview": "Migraine is a neurological condition marked by recurring moderate to severe headaches, often accompanied by nausea, vomiting, and sensitivity to light and sound.",
+    "symptoms": ["throbbing headache", "nausea", "sensitivity to light", "aura"],
+    "how_common": "Affects about 1 in 7 people worldwide.",
+    "risk_factors": ["stress", "hormonal changes", "sleep disturbances"],
+    "diagnosed_by": "Migraine is typically diagnosed based on medical history, symptoms, and physical examination. In some cases, imaging may be done to rule out other causes."
+  },
+  {
+    "name": "pneumonia",
+    "overview": "Pneumonia is a lung infection that causes inflammation in the air sacs, filling them with fluid or pus. It can be caused by bacteria, viruses, or fungi.",
+    "symptoms": ["cough", "fever", "shortness of breath", "chest pain"],
+    "how_common": "Very common, especially in children and the elderly.",
+    "risk_factors": ["weakened immune system", "smoking", "chronic diseases"],
+    "diagnosed_by": "Doctors can diagnose pneumonia by reviewing your symptoms, listening to your lungs with a stethoscope, and confirming with a chest X-ray or sputum culture."
+  },
+  {
+    "name": "tuberculosis",
+    "overview": "Tuberculosis (TB) is a highly contagious bacterial infection that primarily affects the lungs but can also impact other parts of the body.",
+    "symptoms": ["persistent cough", "weight loss", "night sweats", "fever"],
+    "how_common": "Affects millions annually, especially in low-income countries.",
+    "risk_factors": ["HIV", "malnutrition", "overcrowded living conditions"],
+    "diagnosed_by": "TB is diagnosed using a skin test (Mantoux), chest X-rays, and sputum tests to detect Mycobacterium tuberculosis in the lungs."
+  },
+  {
+    "name": "ulcer",
+    "overview": "An ulcer is a painful sore in the lining of the stomach or small intestine, typically caused by bacterial infection or long-term use of anti-inflammatory drugs.",
+    "symptoms": ["burning stomach pain", "bloating", "heartburn", "nausea"],
+    "how_common": "Common globally, especially peptic ulcers.",
+    "risk_factors": ["H. pylori infection", "NSAIDs", "stress"],
+    "diagnosed_by": "Doctors diagnose ulcers using an upper endoscopy to view the stomach lining. They may also test for H. pylori infection or perform a barium swallow X-ray."
   }
 ]

@@ -7,6 +7,7 @@ import joblib
 import numpy as np
 import os
 import csv
+import pandas as pd
 import requests
 import json
 
@@ -22,9 +23,15 @@ model_path = os.path.join("models", "rf_disease_model.pkl")
 print("Loading model from:", model_path)
 model = joblib.load(model_path)
 
-# Load symptoms dynamically from JSON
-with open("static/data/symptoms.json") as f:
-    SYMPTOM_ORDER = sorted([s.lower() for s in json.load(f)])
+SYMPTOM_ORDER = [
+    'fever', 'cough', 'chest_pain', 'fatigue', 'weight_loss', 'shortness_of_breath',
+    'nausea', 'vomiting', 'headache', 'dizziness', 'palpitations', 'abdominal_pain',
+    'joint_pain', 'muscle_pain', 'diarrhea', 'constipation', 'blood_in_stool', 'skin_rash',
+    'night_sweats', 'loss_of_appetite', 'swelling', 'yellow_skin', 'back_pain',
+    'vision_problems', 'bleeding', 'age', 'gender',
+    'history_ischemic_heart_disease', 'history_chronic_heart_disease',
+    'history_tuberculosis', 'history_cirrhosis_of_the_liver', 'history_cancer'
+]
 
 PRIORITY_DISEASES = ['ischemic heart disease', 'chronic heart disease', 'tuberculosis', 'cirrhosis of the liver', 'cancer']
 
@@ -139,25 +146,39 @@ def logout():
 def predict():
     data = request.get_json()
     if not data:
+        print("Empty or invalid JSON")
         return jsonify({'error': 'No input received'}), 400
 
-    input_data = [1 if symptom in data and data[symptom] == 1 else 0 for symptom in SYMPTOM_ORDER]
-
-    if 'user_id' in session:
-        history = MedicalHistory.query.filter_by(user_id=session['user_id']).order_by(MedicalHistory.date.desc()).limit(3).all()
-        past_diseases = [h.disease.lower() for h in history]
-        history_vector = [1 if d in past_diseases else 0 for d in PRIORITY_DISEASES]
-    else:
-        history_vector = [0] * len(PRIORITY_DISEASES)
-
-    full_input = input_data + history_vector
     try:
-        prediction = model.predict([full_input])[0]
-        return jsonify({'predicted_disease': prediction})
+        # Reconstruct input vector in strict feature order
+        input_data = [
+            int(data.get(sym, 0)) for sym in [
+                'fever', 'cough', 'chest_pain', 'fatigue', 'weight_loss', 'shortness_of_breath',
+                'nausea', 'vomiting', 'headache', 'dizziness', 'palpitations', 'abdominal_pain',
+                'joint_pain', 'muscle_pain', 'diarrhea', 'constipation', 'blood_in_stool', 'skin_rash',
+                'night_sweats', 'loss_of_appetite', 'swelling', 'yellow_skin', 'back_pain',
+                'vision_problems', 'bleeding', 'age', 'gender',
+                'history_ischemic_heart_disease', 'history_chronic_heart_disease',
+                'history_tuberculosis', 'history_cirrhosis_of_the_liver', 'history_cancer'
+            ]
+        ]
+
+        probabilities = model.predict_proba([input_data])[0]
+        class_labels = model.classes_
+        
+        # Get top 3 indices sorted by probability
+        top_indices = np.argsort(probabilities)[::-1][:3]
+        top_predictions = [
+            {"disease": class_labels[i], "likelihood": round(probabilities[i] * 100, 2)}
+            for i in top_indices if probabilities[i] > 0
+        ]
+
+        return jsonify({"predictions": top_predictions})
+
     except Exception as e:
         print("Prediction error:", e)
-        return jsonify({'error': str(e)}), 500
-
+        return jsonify({'error': str(e)}), 500  
+   
 @app.route('/symptom-checker', methods=['GET', 'POST'])
 def symptom_checker():
     prediction = None
