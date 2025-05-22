@@ -1,55 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Admin Dashboard</title>
-  <style>
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f4f4f4; }
-    h2 { margin-top: 40px; }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
-  <p><a href="/admin/stats">📊 View Analytics</a></p>
-  <p><a href="/admin/export-csv">⬇️ Export All Medical Records as CSV</a></p>
 
-  <h2>Registered Users</h2>
-  <table>
-    <tr><th>ID</th><th>Username</th><th>Email</th><th>Location</th></tr>
-    {% for user in users %}
-    <tr>
-      <td>{{ user.id }}</td>
-      <td>{{ user.username }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.location or 'N/A' }}</td>
-      <td>
-        <a href="/admin/delete-user/{{ user.id }}" onclick="return confirm('Delete user {{ user.username }}?')">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/" class="logo">
+      <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo" class="logo-img">
+      <span>LedeMekai</span>
+    </a>
+    <div class="nav-links">
+      {% if session['username'] %}
+        <div class="user-menu">
+          <img src="{{ url_for('static', filename='images/user-icon.jpg') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
+          <div id="user-dropdown" class="dropdown-content">
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      {% endif %}
+    </div>
+  </nav>
 
-  <h2>All Medical Predictions</h2>
-  <table>
-    <tr><th>ID</th><th>User ID</th><th>Disease</th><th>Date</th></tr>
-    {% for rec in records %}
-    <tr>
-      <td>{{ rec.id }}</td>
-      <td>{{ rec.user_id }}</td>
-      <td>
-        {{ rec.disease }}<br>
-        <small>
-          {% set sym_dict = rec.symptoms_json | tojson | loads %}
-          Symptoms: {{ sym_dict | dictsort | selectattr('1', 'equalto', 1) | map(attribute=0) | join(', ') }}
-        </small>
-      </td>
-      <td>{{ rec.date.strftime('%Y-%m-%d %H:%M') }}</td>
-      <td>
-        <a href="/admin/delete-record/{{ rec.id }}" onclick="return confirm('Delete this record?')">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <!-- Admin Dashboard Container -->
+  <div class="admin-dashboard">
+    <section class="admin-container">
+      <h1 class="admin-title">Admin Dashboard</h1>
+
+      <div class="admin-actions">
+        <a href="/admin/stats" class="admin-link">📊 View Analytics</a>
+        <a href="/admin/export-csv" class="admin-link">⬇️ Export All Medical Records as CSV</a>
+      </div>
+
+      <h2 class="admin-section-title">Registered Users</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Username</th><th>Email</th><th>Location</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.location or 'N/A' }}</td>
+              <td>
+                <a href="/admin/delete-user/{{ user.id }}" class="delete-btn" onclick="return confirm('Delete user {{ user.username }}?')">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="admin-section-title">All Medical Predictions</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>User ID</th><th>Disease</th><th>Date</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            {% for rec in records %}
+            <tr>
+              <td>{{ rec.id }}</td>
+              <td>{{ rec.user_id }}</td>
+              <td>
+                {{ rec.disease }}<br>
+                <small>
+                  Symptoms: 
+                  {{ rec.symptoms_dict | dictsort | selectattr('1', 'equalto', 1) | map(attribute=0) | join(', ') }}
+                </small>
+              </td>
+              <td>{{ rec.date.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>
+                <a href="/admin/delete-record/{{ rec.id }}" class="delete-btn" onclick="return confirm('Delete this record?')">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer (outside admin-dashboard) -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-logo-left">
+        <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo">
+      </div>
+      <div class="footer-center-content">
+        <div class="footer-brand">
+          <h2>LedeMekai</h2>
+        </div>
+        <div class="footer-columns">
+          <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Our Mission</p>
+            <p>Team</p>
+            <p>Newsletter</p>
+          </div>
+          <div class="footer-column">
+            <h3>Support</h3>
+            <p>Contact</p>
+            <p>Help Center</p>
+            <p>FAQs</p>
+          </div>
+          <div class="footer-column">
+            <h3>Social</h3>
+            <p>Facebook</p>
+            <p>LinkedIn</p>
+            <p>YouTube</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-bottom">
+      <p>© 2025 LedeMekai</p>
+      <p><a href="/terms">Terms of Service</a></p>
+      <p><a href="#">Back to top</a></p>
+    </div>
+  </footer>
+
 </body>
 </html>

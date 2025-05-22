@@ -262,6 +262,14 @@ def admin_dashboard():
 
     users = User.query.all()
     records = MedicalHistory.query.order_by(MedicalHistory.date.desc()).all()
+
+    # Decode JSON to dictionary
+    for rec in records:
+        try:
+            rec.symptoms_dict = json.loads(rec.symptoms_json)
+        except:
+            rec.symptoms_dict = {}
+
     return render_template('admin_dashboard.html', users=users, records=records)
 
 @app.route('/admin-logout')
@@ -325,7 +333,17 @@ def profile():
         return redirect(url_for('login'))
 
     user = User.query.get(user_id)
-    return render_template('profile.html', user=user)
+    history = MedicalHistory.query.filter_by(user_id=user_id).order_by(MedicalHistory.date.desc()).all()
+
+    # Load symptoms from JSON for rendering
+    for rec in history:
+        try:
+            rec.symptoms = json.loads(rec.symptoms_json)
+        except:
+            rec.symptoms = {}
+
+    return render_template('profile.html', user=user, history=history)
+
 
 
 @app.route('/update_profile', methods=['POST'])

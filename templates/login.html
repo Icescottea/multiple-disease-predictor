@@ -18,6 +18,7 @@
         <input type="text" name="username" id="username" placeholder="Enter your email" required>
 
         <div class="password-wrapper">
+          <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="Enter password" required>
           <span class="toggle-password" onclick="togglePassword('password', this)">
             <img src="{{ url_for('static', filename='images/eye.png') }}" alt="Toggle" class="eye-icon">

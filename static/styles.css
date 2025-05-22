@@ -122,7 +122,7 @@ body {
 
 .toggle-password {
   position: absolute;
-  top: 50%;
+  top: 65%;
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
@@ -475,4 +475,85 @@ button[type="submit"]:hover {
 
 .scroll-inner::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge */
+}
+
+.admin-dashboard {
+  background-color: #f9f9f9;
+  padding: 40px;
+}
+
+.admin-container {
+  font-family: Arial, sans-serif;
+}
+
+.admin-title {
+  font-size: 2.2rem;
+  color: #007BFF;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.admin-link {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.admin-link:hover {
+  background-color: #218838;
+}
+
+.admin-section-title {
+  margin-top: 40px;
+  color: #333;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.delete-btn {
+  color: red;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  text-decoration: underline;
 }

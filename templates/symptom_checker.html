@@ -61,7 +61,6 @@
       <input type="hidden" id="user-age" value="{{ user_age }}">
     {% endif %}
   </section>
-
   <!-- Step 2: Symptom Input -->
   <section id="step-2" class="section">
     <div class="symptom-container-card">
@@ -91,12 +90,19 @@
              usemap="#body-map-areas" alt="Body Map" class="body-image-fixed">
         <map name="body-map-areas" id="body-map-areas">
           <area shape="rect" coords="120,20,180,70" alt="Head" onclick="selectRegion('head')">
-          <!-- Add more area tags -->
+          <area shape="rect" coords="100,70,200,130" alt="Chest" onclick="selectRegion('chest')">
+          <area shape="rect" coords="110,130,190,180" alt="Abdomen" onclick="selectRegion('abdomen')">
+          <area shape="rect" coords="90,180,210,240" alt="Pelvis" onclick="selectRegion('pelvis')">
+          <area shape="rect" coords="60,80,100,200" alt="Left Arm" onclick="selectRegion('left_arm')">
+          <area shape="rect" coords="200,80,240,200" alt="Right Arm" onclick="selectRegion('right_arm')">
+          <area shape="rect" coords="110,240,140,350" alt="Left Leg" onclick="selectRegion('left_leg')">
+          <area shape="rect" coords="160,240,190,350" alt="Right Leg" onclick="selectRegion('right_leg')">
         </map>
       </div>
+
     </div>
   </section>
-
+  
   <!-- Step 3: Prediction Result -->
   <section id="step-3" class="section">
     <h3>Possible Diseases:</h3>
@@ -132,7 +138,6 @@
       </div>
     </div>
   </section>
-
   <!-- Step 5: Treatment Info -->
   <section id="step-5" class="section">
     <h2 class="disease-heading">Treatment Plan</h2>
@@ -170,7 +175,6 @@
     
     </div>
   </section>
-
   <!-- Step Navigation Buttons -->
   <div class="nav-buttons">
     <button onclick="prevStep()">Previous</button>
