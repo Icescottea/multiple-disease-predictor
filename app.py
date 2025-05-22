@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mdps.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.jinja_env.filters['loads'] = json.loads 
 
 db = SQLAlchemy(app)
 
@@ -232,25 +233,14 @@ def symptom_checker():
 @app.route('/recommend-hospital', methods=['POST'])
 def recommend_hospital():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return jsonify({"error": "Not logged in"}), 401
 
-    disease = request.form.get('disease')
+    data = request.get_json()
+    disease = data.get('selectedDisease')
     user = User.query.get(session['user_id'])
     location = user.location
     hospitals = get_hospitals_from_google(location, disease)
-    return render_template('hospital_results.html', hospitals=hospitals, disease=disease, location=location)
-
-@app.route('/profile')
-def profile():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-    history = MedicalHistory.query.filter_by(user_id=user_id).order_by(MedicalHistory.date.desc()).all()
-    for rec in history:
-        rec.symptoms = json.loads(rec.symptoms_json)
-    return render_template('profile.html', history=history, username=session['username'], location=user.location)
+    return jsonify(hospitals)
     
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
@@ -327,6 +317,70 @@ def export_csv():
     output.seek(0)
     return Response(output, mimetype='text/csv',
                     headers={"Content-Disposition": "attachment;filename=medical_history.csv"})
+
+@app.route('/profile')
+def profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)
+
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    user.username = request.form['username']
+    user.email = request.form['email']
+    user.location = request.form['location']
+    user.age = int(request.form['age'])
+    user.gender = int(request.form['gender'])
+
+    db.session.commit()
+    return redirect(url_for('profile', msg="Profile updated successfully"))
+
+
+@app.route('/delete_profile', methods=['POST'])
+def delete_profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    MedicalHistory.query.filter_by(user_id=user_id).delete()
+    db.session.delete(user)
+    db.session.commit()
+    session.clear()
+    return redirect(url_for('home', msg="Account Deleted"))
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    current_pw = request.form['current_password']
+    new_pw = request.form['new_password']
+
+    if not check_password_hash(user.password, current_pw):
+        return redirect(url_for('profile', msg="Incorrect current password"))
+
+    if len(new_pw) < 8 or \
+       not any(c.islower() for c in new_pw) or \
+       not any(c.isupper() for c in new_pw) or \
+       not any(c.isdigit() for c in new_pw) or \
+       not any(c in "!@#$%^&*()_+-=[]{}|;:',.<>?/" for c in new_pw):
+        return redirect(url_for('profile', msg="Weak password: use A-Z, a-z, 0-9, symbol"))
+
+    user.password = generate_password_hash(new_pw)
+    db.session.commit()
+    return redirect(url_for('profile', msg="Password changed successfully"))
 
 if __name__ == '__main__':
     app.run(debug=True)

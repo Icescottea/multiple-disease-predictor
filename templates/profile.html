@@ -1,27 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{{ username }}'s Profile - MDPS</title>
-  <style>
-    body { font-family: Arial; margin: 40px; }
-    h2 { text-align: center; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    th { background-color: #f2f2f2; }
-  </style>
+  <meta charset="UTF-8">
+  <title>Profile - MDPS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
 </head>
 <body>
-  <h2>{{ username }}'s Medical History</h2>
-  <p style="text-align:center;">Location: {{ location }}</p>
 
+  <div class="profile-actions">
+    <h2>Edit Profile</h2>
+    <form method="POST" action="/update_profile">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="{{ user.username }}" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" value="{{ user.location }}">
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" value="{{ user.age }}">
+
+      <label for="gender">Gender:</label>
+      <select name="gender" id="gender" required>
+        <option value="1" {% if user.gender == 1 %}selected{% endif %}>Male</option>
+        <option value="0" {% if user.gender == 0 %}selected{% endif %}>Female</option>
+      </select>
+
+      <button type="submit">Update Profile</button>
+    </form>
+
+    <hr>
+
+    <h3>Change Password</h3>
+    <form method="POST" action="/change_password">
+      <label for="current_password">Current Password:</label>
+      <input type="password" id="current_password" name="current_password" required>
+
+      <label for="new_password">New Password:</label>
+      <input type="password" id="new_password" name="new_password" required>
+
+      <button type="submit">Change Password</button>
+    </form>
+
+    <hr>
+
+    <form method="POST" action="/delete_profile" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+      <button type="submit" class="delete-button">Delete My Account</button>
+    </form>
+  </div>
+
+  <h3>Medical History</h3>
   {% if history %}
     <table>
       <tr>
@@ -48,5 +78,48 @@
   {% else %}
     <p>No medical history found.</p>
   {% endif %}
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.className = "toast show";
+      setTimeout(() => {
+        toast.className = toast.className.replace("show", "");
+      }, 3000);
+    }
+
+    document.getElementById('new_password').addEventListener('input', function () {
+      const pw = this.value;
+      const msg = document.getElementById('pw-error');
+      if (!msg) {
+        const span = document.createElement('span');
+        span.id = 'pw-error';
+        span.className = 'error-msg';
+        this.parentNode.appendChild(span);
+      }
+      const errorBox = document.getElementById('pw-error');
+      if (!isStrongPassword(pw)) {
+        errorBox.textContent = "Password must be at least 8 characters, include a number, lowercase, uppercase, and special character.";
+      } else {
+        errorBox.textContent = "";
+      }
+    });
+
+    function isStrongPassword(pw) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      return regex.test(pw);
+    }
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('msg')) {
+        showToast(params.get('msg'));
+      }
+    };
+  </script>
+
 </body>
 </html>

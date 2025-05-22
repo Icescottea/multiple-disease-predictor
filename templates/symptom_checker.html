@@ -162,6 +162,11 @@
         <h4>Emergency Care Required?</h4>
         <p id="emergency-care"></p>
       </div>
+
+      <div id="hospital-results">
+        <h4>Nearby Hospitals</h4>
+        <ul id="hospital-list"></ul>
+      </div>
     
     </div>
   </section>
@@ -253,6 +258,7 @@
     
       if (currentStep === 4 && selectedDisease) {
         loadTreatmentInfo(selectedDisease);
+        loadHospitals(selectedDisease);
       }
     
       if (currentStep < totalSteps) {
@@ -363,6 +369,27 @@
       .catch(err => {
         console.error("Prediction error:", err);
         alert("Prediction failed.");
+      });
+    }
+
+    function loadHospitals(selectedDisease) {
+      fetch('/recommend-hospital', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedDisease: selectedDisease })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('hospital-list');
+        list.innerHTML = '';
+        data.forEach(hospital => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${hospital.name}</strong><br>${hospital.address}<br>Rating: ${hospital.rating || 'N/A'}`;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("Failed to fetch hospitals:", err);
       });
     }
 
