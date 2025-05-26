@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}LedeMekai{% endblock %}</title>
+
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  {% block head_extras %}{% endblock %}
+  
+</head>
+<body>
+  {% include 'navbar.html' %}
+
+  <style> body { font-family: 'Poppins', sans-serif; } </style>
+
+  {% block content %}{% endblock %}
+
+  {% include 'footer.html' %}
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById("user-dropdown");
+      dropdown.classList.toggle("show");
+    }
+    window.onclick = function(event) {
+      if (!event.target.matches('.user-icon')) {
+        const dropdown = document.getElementById("user-dropdown");
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

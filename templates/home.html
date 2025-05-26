@@ -1,35 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>LedeMekai</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+{% extends "layout.html" %}
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="/" class="logo">
-      <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo" class="logo-img">
-      <span>LedeMekai</span>
-    </a>
-    <div class="nav-links">
-      {% if session['username'] %}
-        <div class="user-menu">
-          <img src="{{ url_for('static', filename='images/user-icon.jpg') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
-          <div id="user-dropdown" class="dropdown-content">
-            <a href="/profile">Profile</a>
-            <a href="/logout">Logout</a>
-          </div>
-        </div>
-      {% else %}
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-      {% endif %}
-    </div>
-  </nav>
+{% block title %}Home - LedeMekai{% endblock %}
 
-  <!-- Hero Section -->
+{% block content %}
 <section class="hero">
   <div class="hero-content">
     <div class="hero-text">
@@ -50,65 +23,4 @@
     </div>
   </div>
 </section>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-main">
-    <div class="footer-logo-left">
-      <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo">
-    </div>
-    <div class="footer-center-content">
-      <div class="footer-brand">
-        <h2>LedeMekai</h2>
-      </div>
-      <div class="footer-columns">
-        <div class="footer-column">
-          <h3>About Us</h3>
-          <p>Our Mission</p>
-          <p>Team</p>
-          <p>Newsletter</p>
-        </div>
-        <div class="footer-column">
-          <h3>Support</h3>
-          <p>Contact</p>
-          <p>Help Center</p>
-          <p>FAQs</p>
-        </div>
-        <div class="footer-column">
-          <h3>Social</h3>
-          <p>Facebook</p>
-          <p>LinkedIn</p>
-          <p>YouTube</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="footer-divider">
-
-  <div class="footer-bottom">
-    <p>© 2025 LedeMekai</p>
-    <p><a href="/terms">Terms of Service</a></p>
-    <p><a href="#">Back to top</a></p>
-  </div>
-</footer>
-
-
-  <script>
-    function toggleDropdown() {
-      const dropdown = document.getElementById("user-dropdown");
-      dropdown.classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
-      if (!event.target.matches('.user-icon')) {
-        const dropdown = document.getElementById("user-dropdown");
-        if (dropdown && dropdown.classList.contains('show')) {
-          dropdown.classList.remove('show');
-        }
-      }
-    }
-  </script>
-
-</body>
-</html>
+{% endblock %}

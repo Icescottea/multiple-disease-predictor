@@ -29,18 +29,6 @@ body {
   cursor: pointer;
 }
 
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 10px 30px;
-  height: 60px;
-  border-bottom: 1px solid #ddd;
-  color: #000000;
-}
-
 .logo {
   display: flex;
   align-items: center;
@@ -327,89 +315,6 @@ body {
   border-top: 1px solid #ffeeba;
   font-size: 0.95em;
   text-align: center;
-}
-
-/* Footer */
-.footer {
-  background-color: #74efff; /* you can use any light teal or custom color */
-  color: #111;
-  font-family: Arial, sans-serif;
-}
-
-/* Top main layout */
-.footer-main {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  gap: 100px;
-}
-
-/* Left logo */
-.footer-logo-left img {
-  width: 200px;
-  height: auto;
-  margin: 20px 0 20px 40px;
-}
-
-/* Center content */
-.footer-center-content {
-  flex: 1;
-  text-align: left;
-}
-
-.footer-brand h2 {
-  font-size: 2.6em;
-  margin-bottom: 20px;
-  margin-left: 258px;
-  font-family: 'Costa Std ExtraBold';
-}
-
-/* Columns */
-.footer-columns {
-  display: flex;
-  justify-content: center;
-  gap: 140px;
-  flex-wrap: wrap;
-  margin-left: 155px;
-}
-
-.footer-column h3 {
-  font-size: 1em;
-  margin-bottom: 10px;
-  font-weight: bold;
-  font-family: 'Ariata Display Medium';
-}
-
-.footer-column p {
-  margin: 6px 0;
-  font-size: 0.95em;
-  font-family: 'Ariata Display Regular';
-}
-
-/* Divider line */
-.footer-divider {
-  border: none;
-  border-top: 1px solid #666;
-  width: 90%;
-}
-
-/* Bottom bar */
-.footer-bottom {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-size: 0.85em;
-  color: #222;
-}
-
-.footer-bottom a {
-  color: #222;
-  text-decoration: none;
-  margin-left: 440px;
 }
 
 .step2-container {

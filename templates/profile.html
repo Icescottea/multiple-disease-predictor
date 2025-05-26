@@ -1,125 +1,123 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Profile - MDPS</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
-</head>
-<body>
+{% extends "layout.html" %}
 
-  <div class="profile-actions">
-    <h2>Edit Profile</h2>
-    <form method="POST" action="/update_profile">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" value="{{ user.username }}" required>
+{% block title %}Profile - MDPS{% endblock %}
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" value="{{ user.email }}" required>
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+{% endblock %}
 
-      <label for="location">Location:</label>
-      <input type="text" id="location" name="location" value="{{ user.location }}">
+{% block content %}
+<div class="profile-actions">
+  <h2>Edit Profile</h2>
+  <form method="POST" action="/update_profile">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" value="{{ user.username }}" required>
 
-      <label for="age">Age:</label>
-      <input type="number" id="age" name="age" value="{{ user.age }}">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{ user.email }}" required>
 
-      <label for="gender">Gender:</label>
-      <select name="gender" id="gender" required>
-        <option value="1" {% if user.gender == 1 %}selected{% endif %}>Male</option>
-        <option value="0" {% if user.gender == 0 %}selected{% endif %}>Female</option>
-      </select>
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" value="{{ user.location }}">
 
-      <button type="submit">Update Profile</button>
-    </form>
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" value="{{ user.age }}">
 
-    <hr>
+    <label for="gender">Gender:</label>
+    <select name="gender" id="gender" required>
+      <option value="1" {% if user.gender == 1 %}selected{% endif %}>Male</option>
+      <option value="0" {% if user.gender == 0 %}selected{% endif %}>Female</option>
+    </select>
 
-    <h3>Change Password</h3>
-    <form method="POST" action="/change_password">
-      <label for="current_password">Current Password:</label>
-      <input type="password" id="current_password" name="current_password" required>
+    <button type="submit">Update Profile</button>
+  </form>
 
-      <label for="new_password">New Password:</label>
-      <input type="password" id="new_password" name="new_password" required>
+  <hr>
 
-      <button type="submit">Change Password</button>
-    </form>
+  <h3>Change Password</h3>
+  <form method="POST" action="/change_password">
+    <label for="current_password">Current Password:</label>
+    <input type="password" id="current_password" name="current_password" required>
 
-    <hr>
+    <label for="new_password">New Password:</label>
+    <input type="password" id="new_password" name="new_password" required>
 
-    <form method="POST" action="/delete_profile" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
-      <button type="submit" class="delete-button">Delete My Account</button>
-    </form>
-  </div>
+    <button type="submit">Change Password</button>
+  </form>
 
-  <h3>Medical History</h3>
-  {% if history %}
-    <table>
-      <tr>
-        <th>#</th>
-        <th>Disease</th>
-        <th>Symptoms</th>
-        <th>Date</th>
-      </tr>
-      {% for record in history %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ record.disease }}</td>
-        <td>
-          {% for symptom, present in record.symptoms.items() %}
-            {% if present == 1 %}
-              {{ symptom }}{% if not loop.last %}, {% endif %}
-            {% endif %}
-          {% endfor %}
-        </td>
-        <td>{{ record.date.strftime('%Y-%m-%d %H:%M') }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <p>No medical history found.</p>
-  {% endif %}
+  <hr>
 
-  <div id="toast" class="toast"></div>
+  <form method="POST" action="/delete_profile" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+    <button type="submit" class="delete-button">Delete My Account</button>
+  </form>
+</div>
 
-  <script>
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.className = "toast show";
-      setTimeout(() => {
-        toast.className = toast.className.replace("show", "");
-      }, 3000);
+<h3>Medical History</h3>
+{% if history %}
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Disease</th>
+      <th>Symptoms</th>
+      <th>Date</th>
+    </tr>
+    {% for record in history %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ record.disease }}</td>
+      <td>
+        {% for symptom, present in record.symptoms.items() %}
+          {% if present == 1 %}
+            {{ symptom }}{% if not loop.last %}, {% endif %}
+          {% endif %}
+        {% endfor %}
+      </td>
+      <td>{{ record.date.strftime('%Y-%m-%d %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p>No medical history found.</p>
+{% endif %}
+
+<div id="toast" class="toast"></div>
+
+<script>
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = "toast show";
+    setTimeout(() => {
+      toast.className = toast.className.replace("show", "");
+    }, 3000);
+  }
+
+  document.getElementById('new_password').addEventListener('input', function () {
+    const pw = this.value;
+    const msg = document.getElementById('pw-error');
+    if (!msg) {
+      const span = document.createElement('span');
+      span.id = 'pw-error';
+      span.className = 'error-msg';
+      this.parentNode.appendChild(span);
     }
-
-    document.getElementById('new_password').addEventListener('input', function () {
-      const pw = this.value;
-      const msg = document.getElementById('pw-error');
-      if (!msg) {
-        const span = document.createElement('span');
-        span.id = 'pw-error';
-        span.className = 'error-msg';
-        this.parentNode.appendChild(span);
-      }
-      const errorBox = document.getElementById('pw-error');
-      if (!isStrongPassword(pw)) {
-        errorBox.textContent = "Password must be at least 8 characters, include a number, lowercase, uppercase, and special character.";
-      } else {
-        errorBox.textContent = "";
-      }
-    });
-
-    function isStrongPassword(pw) {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-      return regex.test(pw);
+    const errorBox = document.getElementById('pw-error');
+    if (!isStrongPassword(pw)) {
+      errorBox.textContent = "Password must be at least 8 characters, include a number, lowercase, uppercase, and special character.";
+    } else {
+      errorBox.textContent = "";
     }
+  });
 
-    window.onload = function () {
-      const params = new URLSearchParams(window.location.search);
-      if (params.has('msg')) {
-        showToast(params.get('msg'));
-      }
-    };
-  </script>
+  function isStrongPassword(pw) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/;
+    return regex.test(pw);
+  }
 
-</body>
-</html>
+  window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('msg')) {
+      showToast(params.get('msg'));
+    }
+  };
+</script>
+{% endblock %}

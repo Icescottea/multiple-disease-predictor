@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head><title>Disease Stats</title></head>
-<body>
-  <h2>Top 5 Predicted Diseases</h2>
-  <ul>
-    {% for disease, count in top_diseases %}
-      <li>{{ disease }} - {{ count }} predictions</li>
-    {% endfor %}
-  </ul>
-  <a href="/admin-dashboard">← Back to Dashboard</a>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}Disease Stats{% endblock %}
+
+{% block content %}
+  <div class="admin-dashboard">
+    <section class="admin-container">
+      <h2 class="admin-title">Top 5 Predicted Diseases</h2>
+      <ul>
+        {% for disease, count in top_diseases %}
+          <li>{{ disease }} – {{ count }} predictions</li>
+        {% endfor %}
+      </ul>
+      <a href="/admin-dashboard">← Back to Dashboard</a>
+    </section>
+  </div>
+{% endblock %}

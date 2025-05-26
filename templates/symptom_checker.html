@@ -1,34 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Symptom Checker</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='sc.css') }}">
-</head>
-<body>
+{% extends "layout.html" %}
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="/" class="logo">
-      <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo" class="logo-img">
-      <span>LedeMekai</span>
-    </a>
-    <div class="nav-links">
-      {% if session['username'] %}
-        <div class="user-menu">
-          <img src="{{ url_for('static', filename='images/user-icon.jpg') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
-          <div id="user-dropdown" class="dropdown-content">
-            <a href="/profile">Profile</a>
-            <a href="/logout">Logout</a>
-          </div>
-        </div>
-      {% else %}
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-      {% endif %}
-    </div>
-  </nav>
+{% block title %}Symptom Checker{% endblock %}
 
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='sc.css') }}">
+{% endblock %}
+
+{% block content %}
   <!-- Step Navigator -->
   <div class="step-navigator">
     <div class="step-item" id="nav-info">Info</div>
@@ -187,46 +165,6 @@
       <strong>Disclaimer:</strong> This tool provides predictions based on input symptoms and machine learning models. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for any medical concerns.
     </p>
   </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-main">
-      <div class="footer-logo-left">
-        <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo">
-      </div>
-      <div class="footer-center-content">
-        <div class="footer-brand">
-          <h2>LedeMekai</h2>
-        </div>
-        <div class="footer-columns">
-          <div class="footer-column">
-            <h3>About Us</h3>
-            <p>Our Mission</p>
-            <p>Team</p>
-            <p>Newsletter</p>
-          </div>
-          <div class="footer-column">
-            <h3>Support</h3>
-            <p>Contact</p>
-            <p>Help Center</p>
-            <p>FAQs</p>
-          </div>
-          <div class="footer-column">
-            <h3>Social</h3>
-            <p>Facebook</p>
-            <p>LinkedIn</p>
-            <p>YouTube</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr class="footer-divider">
-    <div class="footer-bottom">
-      <p>© 2025 LedeMekai</p>
-      <p><a href="/terms">Terms of Service</a></p>
-      <p><a href="#">Back to top</a></p>
-    </div>
-  </footer>
 
   <!-- Scripts -->
   <script>
@@ -477,5 +415,4 @@
     };
   </script>
 
-</body>
-</html>
+{% endblock %}

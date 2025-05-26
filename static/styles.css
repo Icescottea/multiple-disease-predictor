@@ -1,4 +1,3 @@
-/* Body & Reset */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -16,7 +15,8 @@ body {
   background-color: #ffffff;
   padding: 10px 30px;
   height: 60px;
-  border-bottom: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-bottom: none;
   color: #000000;
 }
 
@@ -160,6 +160,7 @@ body {
   font-size: 2.2em;
   line-height: 1.4;
   margin-bottom: 20px;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 .hero-text p {
@@ -171,15 +172,32 @@ body {
 .cta-button {
   padding: 12px 25px;
   font-size: 1em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   background-color: #007BFF;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius:8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .cta-button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-images {
@@ -196,7 +214,7 @@ body {
   transform: rotate(45deg);
   overflow: hidden;
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 10px rgba(0,0,0,0.1);
 }
 
 .diamond img {
@@ -207,6 +225,12 @@ body {
   left: -40%;
   object-fit: cover;
   transform: rotate(-45deg);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.diamond:hover img {
+  transform: rotate(-45deg) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 /* Center image */
@@ -274,6 +298,25 @@ body {
   gap: 140px;
   flex-wrap: wrap;
   margin-left: 155px;
+}
+
+.footer-column a {
+  display: block;
+  text-decoration: none;
+  color: #000;
+  font-size: 0.95em;
+  margin: 6px 0;
+  font-family: 'Ariata Display Regular';
+  transition: color 0.3s ease;
+}
+
+.footer-column i {
+  margin-right: 8px;
+}
+
+.footer-column a:hover {
+  color: #0056b3;
+  text-decoration: underline;
 }
 
 .footer-column h3 {
