@@ -1,17 +1,18 @@
 <nav class="navbar">
-  <a href="/" class="logo">
-    <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo" class="logo-img">
-    <span>LedeMekai</span>
-  </a>
-  <div class="nav-links">
+  <div class="nav-header">
+    <a href="/" class="logo">
+      <img src="{{ url_for('static', filename='images/tlogo.png') }}" alt="Logo" class="logo-img">
+      <span>LedeMekai</span>
+    </a>
+    <div class="hamburger" onclick="toggleMenu(this)">
+      <i class="fas fa-bars"></i>
+    </div>
+  </div>
+
+  <div class="nav-links" id="navLinks">
     {% if session['username'] %}
-      <div class="user-menu">
-        <img src="{{ url_for('static', filename='images/user-icon.jpg') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
-        <div id="user-dropdown" class="dropdown-content">
-          <a href="/profile">Profile</a>
-          <a href="/logout">Logout</a>
-        </div>
-      </div>
+      <a href="/profile">Profile</a>
+      <a href="/logout">Logout</a>
     {% else %}
       <a href="/login">Login</a>
       <a href="/register">Register</a>

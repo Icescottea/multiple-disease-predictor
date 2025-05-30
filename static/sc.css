@@ -267,32 +267,54 @@ body {
 }
 
 /* Treatment Layout */
-.treatment-card {
-  max-width: 700px;
+.step5-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: #fdfdfd;
-  border-radius: 10px;
-  padding: 25px 30px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.treatment-section {
-  margin-bottom: 25px;
+.treatment-card {
+  flex: 1 1 65%;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-.treatment-section h4 {
-  font-size: 1.1rem;
-  margin-bottom: 8px;
+.hospital-recommendation {
+  flex: 1 1 30%;
+  background-color: #f9f9f9;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.hospital-recommendation h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
   color: #333;
-  border-left: 4px solid #28a745;
-  padding-left: 10px;
+  text-align: center;
 }
 
-.treatment-section p {
+.hospital-recommendation ul {
+  padding: 0;
   margin: 0;
+  list-style: none;
+}
+
+.hospital-recommendation li {
+  background-color: #fff;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  font-size: 0.95rem;
   color: #444;
-  font-size: 1rem;
-  line-height: 1.5;
+  text-align: left;
 }
 
 .styled-list {
@@ -361,7 +383,6 @@ body {
   width: 100%;
   max-height: 160px;
   background: #ffffff;
-  border: 1px solid #ccc;
   border-radius: 8px;
   overflow-y: auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
@@ -380,7 +401,7 @@ body {
 
 /* Selected Symptoms List */
 .selected-wrapper {
-  width: 100%;
+  width: 99%;
 }
 
 .selected-card {
@@ -466,6 +487,11 @@ body {
   border-radius: 10px;
 }
 
+area {
+  cursor: pointer;
+}
+
+
 .submit-wrapper {
   margin-top: 30px;
   text-align: center;
@@ -484,5 +510,147 @@ body {
 
 .next-button:hover {
   background-color: #0056b3;
+}
+
+.step-description {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #555;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prediction-card {
+  position: relative;
+  padding: 20px 24px;
+  background-color: #ffffff;
+  border-left: 5px solid #007BFF;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prediction-card:hover {
+  transform: translateY(-4px);
+  background-color: #eef6ff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #007BFF;
+}
+
+.prediction-card p {
+  margin: 0;
+  font-size: 0.96rem;
+  color: #555;
+}
+
+.prediction-card.selected {
+  border-left-color: #28a745;
+  background-color: #eaffea;
+}
+
+@media screen and (max-width: 768px) {
+  /* General Section Padding */
+  .section {
+    padding: 30px 15px 0 15px;
+  }
+
+  /* Step Navigator */
+  .step-navigator {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .step-item {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  /* Form (Step 1) */
+  .form-card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .form-group label,
+  .form-group input,
+  .form-group select {
+    font-size: 1rem;
+  }
+
+  /* Step 2: Symptom Selector */
+  .symptom-container-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .symptom-left, .body-map-container {
+    width: 100%;
+    align-items: center;
+  }
+
+  .body-image-fixed {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Step 3: Predictions */
+  #disease-result-list {
+    padding: 10px;
+  }
+
+  .prediction-card {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+
+  /* Step 4: Disease Details */
+  .disease-card {
+    padding: 20px;
+    width: 100%;
+  }
+
+  /* Step 5: Responsive Flex */
+  .step5-flex-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .treatment-card,
+  .hospital-recommendation {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .hospital-recommendation h4 {
+    font-size: 1.1rem;
+  }
+
+  .hospital-recommendation li {
+    font-size: 0.9rem;
+  }
+
+  /* Navigation Buttons */
+  .nav-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-buttons button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    font-size: 0.9rem;
+    padding: 15px;
+  }
 }
 

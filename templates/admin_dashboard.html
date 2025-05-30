@@ -3,65 +3,75 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<!-- Admin Dashboard Container -->
-<div class="admin-dashboard">
-  <section class="admin-container">
-    <h1 class="admin-title">Admin Dashboard</h1>
+<style> body { background-color: #89c8ff; } </style>
+<section class="admin-dashboard admin-container">
+  <h1 class="admin-title">Admin Dashboard</h1>
 
-    <div class="admin-actions">
-      <a href="/admin/stats" class="admin-link">📊 View Analytics</a>
-      <a href="/admin/export-csv" class="admin-link">⬇️ Export All Medical Records as CSV</a>
-    </div>
+  <div class="admin-actions">
+    <a href="/admin/stats" class="admin-link">📊 View Analytics</a>
+    <a href="/admin/export-csv" class="admin-link">⬇️ Export All Medical Records</a>
+  </div>
 
-    <h2 class="admin-section-title">Registered Users</h2>
-    <div class="table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr><th>ID</th><th>Username</th><th>Email</th><th>Location</th><th>Action</th></tr>
-        </thead>
-        <tbody>
-          {% for user in users %}
-          <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.location or 'N/A' }}</td>
-            <td>
-              <a href="/admin/delete-user/{{ user.id }}" class="delete-btn" onclick="return confirm('Delete user {{ user.username }}?')">Delete</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+  <h2 class="admin-section-title">Registered Users</h2>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.location or 'N/A' }}</td>
+          <td>
+            <a href="/admin/delete-user/{{ user.id }}" class="delete-btn" onclick="return confirm('Delete user {{ user.username }}?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-    <h2 class="admin-section-title">All Medical Predictions</h2>
-    <div class="table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr><th>ID</th><th>User ID</th><th>Disease</th><th>Date</th><th>Action</th></tr>
-        </thead>
-        <tbody>
-          {% for rec in records %}
-          <tr>
-            <td>{{ rec.id }}</td>
-            <td>{{ rec.user_id }}</td>
-            <td>
-              {{ rec.disease }}<br>
-              <small>
-                Symptoms: 
-                {{ rec.symptoms_dict | dictsort | selectattr('1', 'equalto', 1) | map(attribute=0) | join(', ') }}
-              </small>
-            </td>
-            <td>{{ rec.date.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>
-              <a href="/admin/delete-record/{{ rec.id }}" class="delete-btn" onclick="return confirm('Delete this record?')">Delete</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </section>
-</div>
+  <h2 class="admin-section-title">All Medical Predictions</h2>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Disease</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in records %}
+        <tr>
+          <td>{{ rec.id }}</td>
+          <td>{{ rec.user_id }}</td>
+          <td>
+            {{ rec.disease }}<br>
+            <small>
+              Symptoms:
+              {{ rec.symptoms_dict | dictsort | selectattr('1', 'equalto', 1) | map(attribute=0) | join(', ') }}
+            </small>
+          </td>
+          <td>{{ rec.date.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>
+            <a href="/admin/delete-record/{{ rec.id }}" class="delete-btn" onclick="return confirm('Delete this record?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
 {% endblock %}

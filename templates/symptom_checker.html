@@ -28,7 +28,7 @@
         <div class="form-group">
           <label for="gender-select-form">Gender:</label>
           <select name="gender" id="gender-select-form" required onchange="loadBodyImage()">
-            <option value="">--Select--</option>
+            <option value="">  Select  </option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
@@ -63,18 +63,16 @@
         <div class="map-controls">
           <button onclick="toggleView()">Flip View</button>
         </div>
-        <img id="body-image"
-             src="{{ url_for('static', filename='images/female-front.png') }}"
-             usemap="#body-map-areas" alt="Body Map" class="body-image-fixed">
+        <img id="body-image" usemap="#body-map-areas" class="body-image-fixed" data-view="front">
         <map name="body-map-areas" id="body-map-areas">
-          <area shape="rect" coords="120,20,180,70" alt="Head" onclick="selectRegion('head')">
-          <area shape="rect" coords="100,70,200,130" alt="Chest" onclick="selectRegion('chest')">
-          <area shape="rect" coords="110,130,190,180" alt="Abdomen" onclick="selectRegion('abdomen')">
-          <area shape="rect" coords="90,180,210,240" alt="Pelvis" onclick="selectRegion('pelvis')">
-          <area shape="rect" coords="60,80,100,200" alt="Left Arm" onclick="selectRegion('left_arm')">
-          <area shape="rect" coords="200,80,240,200" alt="Right Arm" onclick="selectRegion('right_arm')">
-          <area shape="rect" coords="110,240,140,350" alt="Left Leg" onclick="selectRegion('left_leg')">
-          <area shape="rect" coords="160,240,190,350" alt="Right Leg" onclick="selectRegion('right_leg')">
+          <area shape="rect" coords="190,20,250,70" alt="Head" onclick="selectRegion('head', event)">                
+          <area shape="rect" coords="170,70,270,140" alt="Chest" onclick="selectRegion('chest', event)">        
+          <area shape="rect" coords="180,145,260,210" alt="Abdomen" onclick="selectRegion('abdomen', event)">
+          <area shape="rect" coords="180,215,260,265" alt="Pelvis" onclick="selectRegion('pelvis', event)">
+          <area shape="rect" coords="110,80,160,240" alt="Left Arm" onclick="selectRegion('left_arm', event)">
+          <area shape="rect" coords="270,80,320,240" alt="Right Arm" onclick="selectRegion('right_arm', event)">
+          <area shape="rect" coords="190,270,220,460" alt="Left Leg" onclick="selectRegion('left_leg', event)">
+          <area shape="rect" coords="230,270,260,460" alt="Right Leg" onclick="selectRegion('right_leg', event)">
         </map>
       </div>
 
@@ -83,11 +81,11 @@
   
   <!-- Step 3: Prediction Result -->
   <section id="step-3" class="section">
-    <h3>Possible Diseases:</h3>
+    <h2 class="disease-heading">Prediction Results</h2>
+    <p class="step-description">Based on your selected symptoms, here are the most likely conditions:</p>
     <div id="disease-result-list">
-      <!-- Predictions will be dynamically inserted here -->
+      <!-- Predictions dynamically inserted here -->
     </div>
-    <button onclick="nextStep()">View Details</button>
   </section>
 
   <!-- Step 4: Disease Details -->
@@ -116,43 +114,43 @@
       </div>
     </div>
   </section>
+
   <!-- Step 5: Treatment Info -->
   <section id="step-5" class="section">
     <h2 class="disease-heading">Treatment Plan</h2>
-    <div class="treatment-card">
-      
-      <div class="treatment-section">
-        <h4>Goals</h4>
-        <p id="treat-goals"></p>
+    <div class="step5-flex-container">
+      <!-- Left: Treatment Info -->
+      <div class="treatment-card">
+        <div class="treatment-section">
+          <h4>Goals</h4>
+          <p id="treat-goals"></p>
+        </div>
+        <div class="treatment-section">
+          <h4>Options</h4>
+          <ul id="treat-options" class="styled-list"></ul>
+        </div>
+        <div class="treatment-section">
+          <h4>Self-Care</h4>
+          <ul id="self-care" class="styled-list"></ul>
+        </div>
+        <div class="treatment-section">
+          <h4>Long-Term Management</h4>
+          <p id="long-term"></p>
+        </div>
+        <div class="treatment-section">
+          <h4>Emergency Care Required?</h4>
+          <p id="emergency-care"></p>
+        </div>
       </div>
     
-      <div class="treatment-section">
-        <h4>Options</h4>
-        <ul id="treat-options" class="styled-list"></ul>
-      </div>
-    
-      <div class="treatment-section">
-        <h4>Self-Care</h4>
-        <ul id="self-care" class="styled-list"></ul>
-      </div>
-    
-      <div class="treatment-section">
-        <h4>Long-Term Management</h4>
-        <p id="long-term"></p>
-      </div>
-    
-      <div class="treatment-section">
-        <h4>Emergency Care Required?</h4>
-        <p id="emergency-care"></p>
-      </div>
-
-      <div id="hospital-results">
+      <!-- Right: Hospitals -->
+      <aside class="hospital-recommendation">
         <h4>Nearby Hospitals</h4>
-        <ul id="hospital-list"></ul>
-      </div>
-    
+        <ul id="hospital-list" class="styled-list"></ul>
+      </aside>
     </div>
   </section>
+
   <!-- Step Navigation Buttons -->
   <div class="nav-buttons">
     <button onclick="prevStep()">Previous</button>
@@ -175,6 +173,37 @@
     let selectedDisease = null;
 
     const fixedSymptoms = [ 'fever', 'cough', 'chest pain', 'fatigue', 'weight loss', 'shortness of breath', 'nausea', 'vomiting', 'headache', 'dizziness', 'palpitations', 'abdominal pain', 'joint pain', 'muscle pain', 'diarrhea', 'constipation', 'blood in stool', 'skin rash', 'night sweats', 'loss of appetite', 'swelling', 'yellow skin', 'back pain', 'vision problems', 'bleeding' ];
+    const regionSymptomMap = {
+      head: ['headache', 'dizziness', 'vision problems', 'fever'],
+      chest: ['chest pain', 'shortness of breath', 'palpitations', 'cough', 'fatigue'],
+      abdomen: ['abdominal pain', 'nausea', 'vomiting', 'diarrhea', 'constipation', 'blood in stool', 'loss of appetite'],
+      pelvis: ['joint pain', 'swelling', 'abdominal pain', 'constipation'],
+      left_arm: ['muscle pain', 'joint pain', 'swelling'],
+      right_arm: ['muscle pain', 'joint pain', 'swelling'],
+      left_leg: ['muscle pain', 'swelling', 'joint pain'],
+      right_leg: ['muscle pain', 'swelling', 'joint pain'],
+      back: ['back pain', 'muscle pain'],
+      skin: ['skin rash', 'yellow skin', 'night sweats'],
+      systemic: ['fever', 'fatigue', 'weight loss', 'night sweats', 'loss of appetite', 'bleeding']
+    };
+
+    window.onload = function () {
+      const isLoggedIn = JSON.parse("{{ 'true' if user_logged_in else 'false' }}");
+      const img = document.getElementById('body-image');
+        
+      if (isLoggedIn) {
+        const gender = "{{ user_gender|lower }}";
+        img.dataset.view = "front";
+        img.dataset.gender = gender;
+        img.src = `/static/images/${gender}-front.png`;
+        currentStep = 2;
+      }
+      if (!isLoggedIn) {
+        loadBodyImage();
+      }
+    
+      showStep(currentStep);
+    };
 
     function showStep(step) {
       for (let i = 1; i <= totalSteps; i++) {
@@ -252,6 +281,17 @@
       document.getElementById('suggestions').innerHTML = '';
     }
 
+    function loadBodyImage() {
+      const gender = document.getElementById('gender-select-form').value;
+      const img = document.getElementById('body-image');
+
+      if (!gender || !img) return;
+
+      img.dataset.gender = gender;
+      img.dataset.view = "front";
+      img.src = `/static/images/${gender}-front.png`;
+    }
+
     function updateSelectedList() {
       const container = document.getElementById('selected-symptoms');
       container.innerHTML = '';
@@ -300,6 +340,7 @@
               loadDiseaseInfo(selectedDisease);
               currentStep = 4;
               showStep(currentStep);
+              highlightSelectedPrediction(item);
             };
             container.appendChild(item);
           });
@@ -312,6 +353,30 @@
         console.error("Prediction error:", err);
         alert("Prediction failed.");
       });
+    }
+
+    function selectRegion(region, event) {
+      event.preventDefault();
+      const symptoms = regionSymptomMap[region];
+      if (!symptoms || symptoms.length === 0) return;
+        
+      let promptMsg = `Select symptoms for ${region}:\n`;
+      symptoms.forEach((sym, idx) => {
+        promptMsg += `${idx + 1}. ${sym}\n`;
+      });
+    
+      const input = prompt(promptMsg + "\nEnter numbers separated by commas (e.g. 1,3):");
+      if (!input) return;
+    
+      const indices = input.split(',').map(i => parseInt(i.trim()) - 1);
+      indices.forEach(i => {
+        const selected = symptoms[i];
+        if (selected && !selectedSymptoms.includes(selected)) {
+          selectedSymptoms.push(selected);
+        }
+      });
+    
+      updateSelectedList();
     }
 
     function loadHospitals(selectedDisease) {
@@ -399,20 +464,19 @@
 
     function toggleView() {
       const img = document.getElementById('body-image');
-      if (img.src.includes('front')) {
-        img.src = "{{ url_for('static', filename='images/female-back.png') }}";
-      } else {
-        img.src = "{{ url_for('static', filename='images/female-front.png') }}";
-      }
+      const currentGender = img.dataset.gender || "female"; // fallback
+      const currentView = img.dataset.view || "front";
+
+      const newView = currentView === "front" ? "back" : "front";
+      img.dataset.view = newView;
+      img.src = `/static/images/${currentGender}-${newView}.png`;
     }
 
-    window.onload = function () {
-      const isLoggedIn = JSON.parse("{{ 'true' if user_logged_in else 'false' }}");
-      if (isLoggedIn) {
-        currentStep = 2;
-      }
-      showStep(currentStep);
-    };
+    function highlightSelectedPrediction(card) {
+      document.querySelectorAll('.prediction-card').forEach(el => el.classList.remove('selected'));
+      card.classList.add('selected');
+    }
+
   </script>
 
 {% endblock %}
