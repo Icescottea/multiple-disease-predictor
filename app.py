@@ -174,6 +174,16 @@ def predict():
             for i in top_indices if probabilities[i] > 0
         ]
 
+         # Save to medical history if user is logged in
+        if 'user_id' in session and top_predictions:
+            record = MedicalHistory(
+                user_id=session['user_id'],
+                disease=top_predictions[0]['disease'],
+                symptoms_json=json.dumps(dict(zip(SYMPTOM_ORDER, input_data)))
+            )
+            db.session.add(record)
+            db.session.commit()
+
         return jsonify({"predictions": top_predictions})
 
     except Exception as e:

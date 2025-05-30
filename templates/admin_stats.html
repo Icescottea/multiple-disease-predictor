@@ -6,12 +6,19 @@
   <div class="admin-dashboard">
     <section class="admin-container">
       <h2 class="admin-title">Top 5 Predicted Diseases</h2>
-      <ul>
-        {% for disease, count in top_diseases %}
-          <li>{{ disease }} – {{ count }} predictions</li>
-        {% endfor %}
-      </ul>
-      <a href="/admin-dashboard">← Back to Dashboard</a>
+
+      <div class="stats-card">
+        <ul class="stats-list">
+          {% for disease, count in top_diseases %}
+            <li>
+              <span class="disease-name">{{ disease }}</span>
+              <span class="disease-count">{{ count }} predictions</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <a href="/admin-dashboard" class="back-link">← Back to Dashboard</a>
     </section>
   </div>
 {% endblock %}

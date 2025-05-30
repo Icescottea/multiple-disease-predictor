@@ -183,6 +183,14 @@ body {
   cursor: pointer;
 }
 
+.toggle-password-login {
+  position: absolute;
+  top: 65%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .eye-icon {
   width: 20px;
   height: 20px;
@@ -885,4 +893,53 @@ button[type="submit"]:hover {
 
 }
 
+.stats-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 25px 30px;
+}
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 1.05rem;
+}
+
+.stats-list li:last-child {
+  border-bottom: none;
+}
+
+.disease-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.disease-count {
+  font-weight: 500;
+  color: #007bff;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #0056b3;
+}
 
