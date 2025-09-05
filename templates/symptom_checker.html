@@ -24,6 +24,7 @@
         <div class="form-group">
           <label for="age">Age:</label>
           <input type="number" id="age" name="age" required>
+          <div id="age-error" class="error-message" style="display: none;">Please enter your age</div>
         </div>
         <div class="form-group">
           <label for="gender-select-form">Gender:</label>
@@ -32,6 +33,7 @@
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
+          <div id="gender-error" class="error-message" style="display: none;">Please select your gender</div>
         </div>
       </form>
     {% else %}
@@ -46,6 +48,7 @@
       <div class="symptom-left">
         <h3>Select Symptoms</h3>
         <input type="text" id="symptom-search" placeholder="Type symptoms..." autocomplete="off"/>
+        <div id="symptom-error" class="error-message" style="display: none;">Please select at least one symptom</div>
       
         <div id="suggestions" class="suggestion-dropdown"></div>
       
@@ -86,6 +89,9 @@
     <div id="disease-result-list">
       <!-- Predictions dynamically inserted here -->
     </div>
+    <div id="prediction-error" class="error-message" style="display: none; text-align: center; margin-top: 20px;">
+      No predictions available. Please go back and select symptoms.
+    </div>
   </section>
 
   <!-- Step 4: Disease Details -->
@@ -112,6 +118,9 @@
         <h4>Diagnosed By</h4>
         <p id="diagnosed-by"></p>
       </div>
+    </div>
+    <div id="disease-info-error" class="error-message" style="display: none; text-align: center;">
+      Disease information not available.
     </div>
   </section>
 
@@ -147,7 +156,13 @@
       <aside class="hospital-recommendation">
         <h4>Nearby Hospitals</h4>
         <ul id="hospital-list" class="styled-list"></ul>
+        <div id="hospital-error" class="error-message" style="display: none;">
+          Hospital information not available.
+        </div>
       </aside>
+    </div>
+    <div id="treatment-error" class="error-message" style="display: none; text-align: center;">
+      Treatment information not available.
     </div>
   </section>
 
@@ -220,7 +235,95 @@
 
     }
 
+    function validateStep(step) {
+      switch(step) {
+        case 1:
+          return validateStep1();
+        case 2:
+          return validateStep2();
+        case 3:
+          return validateStep3();
+        case 4:
+          return validateStep4();
+        case 5:
+          return validateStep5();
+        default:
+          return true;
+      }
+    }
+
+    function validateStep1() {
+      const isLoggedIn = JSON.parse("{{ 'true' if user_logged_in else 'false' }}");
+      if (isLoggedIn) return true;
+      
+      let isValid = true;
+      
+      // Validate age
+      const age = document.getElementById('age').value;
+      const ageError = document.getElementById('age-error');
+      if (!age || age <= 0 || age > 120) {
+        ageError.style.display = 'block';
+        isValid = false;
+      } else {
+        ageError.style.display = 'none';
+      }
+      
+      // Validate gender
+      const gender = document.getElementById('gender-select-form').value;
+      const genderError = document.getElementById('gender-error');
+      if (!gender) {
+        genderError.style.display = 'block';
+        isValid = false;
+      } else {
+        genderError.style.display = 'none';
+      }
+      
+      return isValid;
+    }
+
+    function validateStep2() {
+      const symptomError = document.getElementById('symptom-error');
+      if (selectedSymptoms.length === 0) {
+        symptomError.style.display = 'block';
+        return false;
+      } else {
+        symptomError.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateStep3() {
+      const predictionError = document.getElementById('prediction-error');
+      if (predictedDiseases.length === 0) {
+        predictionError.style.display = 'block';
+        return false;
+      } else {
+        predictionError.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateStep4() {
+      const diseaseInfoError = document.getElementById('disease-info-error');
+      if (!selectedDisease) {
+        diseaseInfoError.style.display = 'block';
+        return false;
+      } else {
+        diseaseInfoError.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateStep5() {
+      // For step 5, we'll just ensure we have a selected disease
+      return selectedDisease !== null;
+    }
+
     function nextStep() {
+      if (!validateStep(currentStep)) {
+        return;
+      }
+
       if (currentStep === 3 && predictedDiseases.length > 0) {
         // If user hasn't clicked one, default to the top prediction
         selectedDisease = predictedDiseases[0].disease;
@@ -279,6 +382,8 @@
       updateSelectedList();
       document.getElementById('symptom-search').value = '';
       document.getElementById('suggestions').innerHTML = '';
+      // Clear error when a symptom is selected
+      document.getElementById('symptom-error').style.display = 'none';
     }
 
     function loadBodyImage() {
@@ -307,8 +412,7 @@
     }
 
     function submitSymptoms() {
-      if (selectedSymptoms.length === 0) {
-        alert("Please select at least one symptom.");
+      if (!validateStep2()) {
         return;
       }
     
@@ -328,6 +432,7 @@
         container.innerHTML = '';
       
         if (data.predictions && data.predictions.length > 0) {
+          predictedDiseases = data.predictions;
           data.predictions.forEach((pred, index) => {
             const item = document.createElement('div');
             item.className = 'prediction-card';
@@ -347,11 +452,13 @@
           nextStep(); // Move to Step 3 to show the predictions
         } else {
           container.innerHTML = '<p>No prediction received.</p>';
+          predictedDiseases = [];
         }
       })
       .catch(err => {
         console.error("Prediction error:", err);
         alert("Prediction failed.");
+        predictedDiseases = [];
       });
     }
 
@@ -377,6 +484,8 @@
       });
     
       updateSelectedList();
+      // Clear error when symptoms are selected via body map
+      document.getElementById('symptom-error').style.display = 'none';
     }
 
     function loadHospitals(selectedDisease) {
@@ -388,15 +497,23 @@
       .then(res => res.json())
       .then(data => {
         const list = document.getElementById('hospital-list');
+        const hospitalError = document.getElementById('hospital-error');
         list.innerHTML = '';
-        data.forEach(hospital => {
-          const li = document.createElement('li');
-          li.innerHTML = `<strong>${hospital.name}</strong><br>${hospital.address}<br>Rating: ${hospital.rating || 'N/A'}`;
-          list.appendChild(li);
-        });
+        
+        if (data && data.length > 0) {
+          hospitalError.style.display = 'none';
+          data.forEach(hospital => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${hospital.name}</strong><br>${hospital.address}<br>Rating: ${hospital.rating || 'N/A'}`;
+            list.appendChild(li);
+          });
+        } else {
+          hospitalError.style.display = 'block';
+        }
       })
       .catch(err => {
         console.error("Failed to fetch hospitals:", err);
+        document.getElementById('hospital-error').style.display = 'block';
       });
     }
 
@@ -417,16 +534,24 @@
       fetch('/static/data/diseases.json')
         .then(res => res.json())
         .then(data => {
+          const diseaseInfoError = document.getElementById('disease-info-error');
           const match = data.find(d => d.name.toLowerCase() === name.toLowerCase());
-          document.getElementById('disease-title').textContent = name;
-          document.getElementById('overview').textContent = match?.overview || 'N/A';
-          document.getElementById('symptoms-list').textContent = match?.symptoms?.join(', ') || 'N/A';
-          document.getElementById('how-common').textContent = match?.how_common || 'N/A';
-          document.getElementById('risk-factors').textContent = match?.risk_factors?.join(', ') || 'N/A';
-          document.getElementById('diagnosed-by').textContent = match?.diagnosed_by || 'N/A';
+          
+          if (match) {
+            diseaseInfoError.style.display = 'none';
+            document.getElementById('disease-title').textContent = name;
+            document.getElementById('overview').textContent = match?.overview || 'N/A';
+            document.getElementById('symptoms-list').textContent = match?.symptoms?.join(', ') || 'N/A';
+            document.getElementById('how-common').textContent = match?.how_common || 'N/A';
+            document.getElementById('risk-factors').textContent = match?.risk_factors?.join(', ') || 'N/A';
+            document.getElementById('diagnosed-by').textContent = match?.diagnosed_by || 'N/A';
+          } else {
+            diseaseInfoError.style.display = 'block';
+          }
         })
         .catch(err => {
           console.error("Failed to load disease info:", err);
+          document.getElementById('disease-info-error').style.display = 'block';
         });
     }
 
@@ -434,31 +559,38 @@
       fetch('/static/data/treatments.json')
         .then(res => res.json())
         .then(data => {
+          const treatmentError = document.getElementById('treatment-error');
           const match = data.find(t => t.name.toLowerCase() === name.toLowerCase());
-        
-          document.getElementById('treat-goals').textContent = match?.treatment_goals || 'N/A';
-        
-          const optionsList = document.getElementById('treat-options');
-          optionsList.innerHTML = '';
-          (match?.treatment_options || []).forEach(opt => {
-            const li = document.createElement('li');
-            li.textContent = opt;
-            optionsList.appendChild(li);
-          });
-        
-          const selfCareList = document.getElementById('self-care');
-          selfCareList.innerHTML = '';
-          (match?.self_care || []).forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            selfCareList.appendChild(li);
-          });
-        
-          document.getElementById('long-term').textContent = match?.long_term_management || 'N/A';
-          document.getElementById('emergency-care').textContent = match?.emergency_care_needed ? 'Yes' : 'No';
+          
+          if (match) {
+            treatmentError.style.display = 'none';
+            document.getElementById('treat-goals').textContent = match?.treatment_goals || 'N/A';
+            
+            const optionsList = document.getElementById('treat-options');
+            optionsList.innerHTML = '';
+            (match?.treatment_options || []).forEach(opt => {
+              const li = document.createElement('li');
+              li.textContent = opt;
+              optionsList.appendChild(li);
+            });
+            
+            const selfCareList = document.getElementById('self-care');
+            selfCareList.innerHTML = '';
+            (match?.self_care || []).forEach(item => {
+              const li = document.createElement('li');
+              li.textContent = item;
+              selfCareList.appendChild(li);
+            });
+            
+            document.getElementById('long-term').textContent = match?.long_term_management || 'N/A';
+            document.getElementById('emergency-care').textContent = match?.emergency_care_needed ? 'Yes' : 'No';
+          } else {
+            treatmentError.style.display = 'block';
+          }
         })
         .catch(err => {
           console.error("Failed to load treatment info:", err);
+          document.getElementById('treatment-error').style.display = 'block';
         });
     }
 
@@ -478,5 +610,17 @@
     }
 
   </script>
+
+  <style>
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+      padding: 5px;
+      background-color: #ffebee;
+      border-radius: 4px;
+      border-left: 3px solid #d32f2f;
+    }
+  </style>
 
 {% endblock %}
